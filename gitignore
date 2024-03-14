@@ -1,0 +1,15 @@
+# Local Vector stores.
+.chromadb
+
+# Environments
+.venv/
+venv
+.env
+.env.dockercompose
+
+
+# Secrets
+secrets.toml
+
+__pycache__
+.idea
