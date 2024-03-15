@@ -1,6 +1,6 @@
 from langchain_core.prompts import ChatPromptTemplate
 
-CONDENSE_QUESTION_PROMPT_STR = """Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question, in its original language. Avoid presenting empty standalone questions. If ambiguity arises, retain the follow up question as is.
+CONDENSE_QUESTION_PROMPT_STR = """Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question, in English language. Avoid presenting empty standalone questions. If ambiguity arises, retain the follow up question as is. Do not include any other content other than the rephrased question.
 
 Chat History:
 {chat_history}

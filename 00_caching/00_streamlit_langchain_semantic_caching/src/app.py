@@ -3,10 +3,12 @@
 import os
 from pathlib import Path
 import streamlit as st
+from langchain_core.messages import HumanMessage, AIMessage
 
 from src.langchain_helper.impl.default_conversational_chain import DefaultLangchainImpl
 from src.langchain_helper.model_config import LLMModel
-from src.utils import format_message, get_bot_message_container, AVATAR_URL
+from src.utils import format_message, get_bot_message_container
+from langchain.callbacks.tracers import ConsoleCallbackHandler
 
 
 ### Function definitions - START
@@ -58,6 +60,10 @@ def message_func(text, is_user=False):
 def append_message(content, role="assistant"):
     """Appends a message to the session state messages."""
     if content.strip():
+        st.session_state.history.extend(
+            [HumanMessage(content=st.session_state["messages"][-1]["content"]),
+             AIMessage(content=content)]
+        )
         st.session_state.messages.append({"role": role, "content": content})
 
 
@@ -135,9 +141,6 @@ for message in st.session_state.messages:
 # Initialize LLM related variables.
 chain = DefaultLangchainImpl(model_type=LLMModel(st.session_state["model"])).get_chain()
 
-def append_chat_history(question, answer):
-    st.session_state["history"].append((question, answer))
-
 # Invoke the LLM by comparing the role of the last message.
 if ("messages" in st.session_state and
         st.session_state["messages"][-1]["role"] != "assistant"
@@ -146,6 +149,7 @@ if ("messages" in st.session_state and
 
     if isinstance(user_input_content, str):
         token_buffer = []
+        complete_message = ""
         content_placeholder = st.empty()
 
         chain_argument = {
@@ -157,13 +161,21 @@ if ("messages" in st.session_state and
         loading_message_content = get_bot_message_container("Thinking...")
         content_placeholder.markdown(loading_message_content, unsafe_allow_html=True)
 
-        for s in chain.stream(chain_argument):
-            token_buffer.append(s.content)
-            complete_message = "".join(token_buffer)
-            container_content = get_bot_message_container(complete_message)
-            content_placeholder.markdown(container_content, unsafe_allow_html=True)
+        # Streaming Implementation
+        #for s in chain.stream(chain_argument, config={'callbacks': [ConsoleCallbackHandler()]}):
+        #    token_buffer.append(s.content)
+        #    complete_message = "".join(token_buffer)
+        #    container_content = get_bot_message_container(complete_message)
+        #    content_placeholder.markdown(container_content, unsafe_allow_html=True)
 
-        append_message("".join(token_buffer))
+        # Normal Implementation
+        result = chain.invoke(chain_argument, config={'callbacks': [ConsoleCallbackHandler()]})
+        token_buffer.append(result.content)
+        complete_message = "".join(token_buffer)
+        container_content = get_bot_message_container(complete_message)
+        content_placeholder.markdown(container_content, unsafe_allow_html=True)
+
+        append_message(complete_message)
 
 ### Default Script Initialization - END
 
