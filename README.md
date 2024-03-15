@@ -4,7 +4,7 @@ This repository encloses examples related to the exploration made regarding vari
 
 ## Examples
 
-1. [Streamlit langchain semantic Caching](./00_streamlit_langchain_semantic_caching/) - _Minimalistic example explaining the concept of semantic caching using langchain._
+1. [Streamlit langchain semantic Caching](./00_caching/00_streamlit_langchain_semantic_caching/) - _Minimalistic example explaining the concept of semantic caching using langchain._
 
 ## Additional information
 

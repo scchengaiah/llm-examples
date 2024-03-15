@@ -9,7 +9,10 @@ venv
 
 
 # Secrets
-secrets.toml
+.streamlit
 
 __pycache__
 .idea
+
+
+
