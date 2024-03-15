@@ -15,8 +15,3 @@ class ModelConfig(BaseModel):
     secrets: Dict[str, Any]
     callback_handler: Optional[Callable] = None
 
-    @validator("model_type", pre=True, always=True)
-    def validate_model_type(cls, v):
-        if v not in LLMModel.__members__().values():
-            raise ValueError(f"Unsupported model type: {v}")
-        return v

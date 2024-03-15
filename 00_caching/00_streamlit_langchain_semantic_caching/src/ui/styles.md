@@ -31,4 +31,27 @@
         border-radius: 50%;
         object-fit: cover;
     }
+    
+    .loading-indicator {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        text-align: center;
+        color: #ccc;
+        animation: loading 1s infinite;
+      }
+    
+      @keyframes loading {
+        0% {
+          color: #ccc;
+        }
+        50% {
+          color: #333;
+        }
+        100% {
+          color: #ccc;
+        }
+      }
+
+
 </style>

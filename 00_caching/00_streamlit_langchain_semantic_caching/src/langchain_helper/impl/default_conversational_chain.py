@@ -17,10 +17,7 @@ class DefaultLangchainImpl(AbstractConversationalChain):
 
     def init_chain(self):
         embeddings = AWSBedrockEmbeddings()
-        vectorstore = get_azure_search_vector_store(embeddings)
-
-        if self.model_type not in LLMModel.__members__():
-            raise ValueError(f"Unsupported model type: {self.model_type}")
+        vectorstore = get_azure_search_vector_store(embeddings.embeddings)
 
         config = ModelConfig(
             model_type=self.model_type, secrets=st.secrets, callback_handler=StreamlitUICallbackHandler()

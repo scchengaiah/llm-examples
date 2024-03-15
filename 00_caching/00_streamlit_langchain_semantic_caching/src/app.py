@@ -4,8 +4,10 @@ import os
 from pathlib import Path
 import streamlit as st
 
-from src.langchain_helper2 import LLM_MODEL
-from src.utils import format_message
+from src.langchain_helper.impl.default_conversational_chain import DefaultLangchainImpl
+from src.langchain_helper.model_config import LLMModel
+from src.utils import format_message, get_bot_message_container, AVATAR_URL
+
 
 ### Function definitions - START
 
@@ -35,7 +37,7 @@ def message_func(text, is_user=False):
             unsafe_allow_html=True,
         )
     else:
-        #avatar_url = "https://avataaars.io/?accessoriesType=Round&avatarStyle=Transparent&clotheColor=Gray01&clotheType=BlazerSweater&eyeType=Default&eyebrowType=DefaultNatural&facialHairColor=Black&facialHairType=BeardLight&hairColor=Black&hatColor=Blue01&mouthType=Smile&skinColor=Light&topType=ShortHairShortFlat"
+        # avatar_url = "https://avataaars.io/?accessoriesType=Round&avatarStyle=Transparent&clotheColor=Gray01&clotheType=BlazerSweater&eyeType=Default&eyebrowType=DefaultNatural&facialHairColor=Black&facialHairType=BeardLight&hairColor=Black&hatColor=Blue01&mouthType=Smile&skinColor=Light&topType=ShortHairShortFlat"
         avatar_url = "https://img.icons8.com/color/48/bot.png"
         message_alignment = "flex-start"
         message_bg_color = "#71797E"
@@ -51,6 +53,7 @@ def message_func(text, is_user=False):
                        """,
             unsafe_allow_html=True,
         )
+
 
 def append_message(content, role="assistant"):
     """Appends a message to the session state messages."""
@@ -95,11 +98,10 @@ with open(f"{RESOURCES_DIR}/styles.md", "r") as styles_file:
     styles_content = styles_file.read()
 st.write(styles_content, unsafe_allow_html=True)
 
-
 # Supported Models.
 model = st.radio(
     "Select your model:",
-    options=[f"✨ {LLM_MODEL.GPT_3_5}", f"♾️ {LLM_MODEL.CLAUDE}"],
+    options=[f"{LLMModel.GPT_3_5.value}", f"{LLMModel.CLAUDE.value}"],
     index=0,
     horizontal=True,
 )
@@ -119,8 +121,6 @@ if "messages" not in st.session_state.keys():
 if "history" not in st.session_state:
     st.session_state["history"] = []
 
-st.text("Selected model: " + st.session_state["model"])
-
 # Prompt for user input and save
 if prompt := st.chat_input():
     st.session_state.messages.append({"role": "user", "content": prompt})
@@ -133,33 +133,37 @@ for message in st.session_state.messages:
     )
 
 # Initialize LLM related variables.
-# Callback handler to stream tokens.
-callback_handler = StreamlitUICallbackHandler()
+chain = DefaultLangchainImpl(model_type=LLMModel(st.session_state["model"])).get_chain()
 
-# Load the LLM.
-chain = load_chain(st.session_state["model"], callback_handler)
-
-
-
+def append_chat_history(question, answer):
+    st.session_state["history"].append((question, answer))
 
 # Invoke the LLM by comparing the role of the last message.
-if (
-    "messages" in st.session_state
-    and st.session_state["messages"][-1]["role"] != "assistant"
+if ("messages" in st.session_state and
+        st.session_state["messages"][-1]["role"] != "assistant"
 ):
     user_input_content = st.session_state["messages"][-1]["content"]
 
     if isinstance(user_input_content, str):
-        callback_handler.start_loading_message()
+        token_buffer = []
+        content_placeholder = st.empty()
 
-        result = chain.invoke(
-            {
-                "question": user_input_content,
-                "chat_history": [h for h in st.session_state["history"]],
-            }
-        )
-        append_message(result.content)
+        chain_argument = {
+            "question": user_input_content,
+            "chat_history": [h for h in st.session_state["history"]],
+        }
 
+        # Thinking message.
+        loading_message_content = get_bot_message_container("Thinking...")
+        content_placeholder.markdown(loading_message_content, unsafe_allow_html=True)
+
+        for s in chain.stream(chain_argument):
+            token_buffer.append(s.content)
+            complete_message = "".join(token_buffer)
+            container_content = get_bot_message_container(complete_message)
+            content_placeholder.markdown(container_content, unsafe_allow_html=True)
+
+        append_message("".join(token_buffer))
 
 ### Default Script Initialization - END
 
