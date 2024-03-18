@@ -1,7 +1,8 @@
 import streamlit as st
 
 from src.langchain_helper.abstract_conversational_chain import AbstractConversationalChain
-from src.langchain_helper.model_config import LLMModel, ModelConfig
+from src.langchain_helper.model_config import ModelConfig
+from src.init_llm_helper import LLMModel
 from src.langchain_helper.model_wrapper import ModelWrapper
 from src.langchain_helper.streamlit_ui_callback_handler import StreamlitUICallbackHandler
 from src.langchain_helper.embeddings.bedrock_embeddings import AWSBedrockEmbeddings
@@ -20,7 +21,7 @@ class DefaultLangchainImpl(AbstractConversationalChain):
         vectorstore = get_azure_search_vector_store(embeddings.embeddings)
 
         config = ModelConfig(
-            model_type=self.model_type, secrets=st.secrets, callback_handler=StreamlitUICallbackHandler()
+            llm_model_type=self.model_type, secrets=st.secrets, callback_handler=StreamlitUICallbackHandler()
         )
         model = ModelWrapper(config)
 

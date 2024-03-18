@@ -2,13 +2,12 @@
 
 import os
 from pathlib import Path
+
 import streamlit as st
 from langchain_core.messages import HumanMessage, AIMessage
 
-from src.langchain_helper.impl.default_conversational_chain import DefaultLangchainImpl
-from src.langchain_helper.model_config import LLMModel
+from src.init_llm_helper import get_llm_impl, LLMModel
 from src.utils import format_message, get_bot_message_container
-from langchain.callbacks.tracers import ConsoleCallbackHandler
 
 
 ### Function definitions - START
@@ -83,7 +82,10 @@ WELCOME_MESSAGE = [
 # Resources directory to load markdown content and styles.
 RESOURCES_DIR = Path(__file__).resolve().parent.joinpath('ui')
 
-st.title("Caching Example")
+st.set_page_config(page_title="LLM Exploration - Streamlit", page_icon="🤖", layout="centered")
+
+with open(f"{RESOURCES_DIR}/app_title.md", 'r', encoding="utf-8") as f:
+    st.title(f.read())
 
 # Initialize sidebar
 with open(f"{RESOURCES_DIR}/sidebar.md", 'r', encoding="utf-8") as f:
@@ -139,7 +141,7 @@ for message in st.session_state.messages:
     )
 
 # Initialize LLM related variables.
-chain = DefaultLangchainImpl(model_type=LLMModel(st.session_state["model"])).get_chain()
+chain = get_llm_impl(model_type=LLMModel(st.session_state["model"])).get_chain()
 
 # Invoke the LLM by comparing the role of the last message.
 if ("messages" in st.session_state and
@@ -162,18 +164,19 @@ if ("messages" in st.session_state and
         content_placeholder.markdown(loading_message_content, unsafe_allow_html=True)
 
         # Streaming Implementation
-        #for s in chain.stream(chain_argument, config={'callbacks': [ConsoleCallbackHandler()]}):
-        #    token_buffer.append(s.content)
-        #    complete_message = "".join(token_buffer)
-        #    container_content = get_bot_message_container(complete_message)
-        #    content_placeholder.markdown(container_content, unsafe_allow_html=True)
+        for s in chain.stream(chain_argument):
+            token_buffer.append(s.content)
+            complete_message = "".join(token_buffer)
+            container_content = get_bot_message_container(complete_message)
+            content_placeholder.markdown(container_content, unsafe_allow_html=True)
 
         # Normal Implementation
-        result = chain.invoke(chain_argument, config={'callbacks': [ConsoleCallbackHandler()]})
-        token_buffer.append(result.content)
-        complete_message = "".join(token_buffer)
-        container_content = get_bot_message_container(complete_message)
-        content_placeholder.markdown(container_content, unsafe_allow_html=True)
+        #result = chain.invoke(chain_argument, config={'callbacks': [ConsoleCallbackHandler()]})
+        #token_buffer.append(result.content)
+        #complete_message = "".join(token_buffer)
+        #container_content = get_bot_message_container(complete_message)
+        #content_placeholder.markdown(container_content, unsafe_allow_html=True)
+
 
         append_message(complete_message)
 

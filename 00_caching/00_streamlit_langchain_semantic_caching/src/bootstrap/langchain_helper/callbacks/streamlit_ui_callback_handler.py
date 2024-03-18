@@ -5,6 +5,7 @@ from src.utils import format_message
 
 
 # Class responsible to stream tokens to the front end.
+# With LCEL usage, we may not need custom callback handler for streaming purpose.
 class StreamlitUICallbackHandler(BaseCallbackHandler):
     def __init__(self):
         self.token_buffer = []
