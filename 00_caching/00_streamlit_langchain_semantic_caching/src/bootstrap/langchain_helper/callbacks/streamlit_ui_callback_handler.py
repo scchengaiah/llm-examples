@@ -1,7 +1,7 @@
 import streamlit as st
 from langchain_core.callbacks import BaseCallbackHandler
 
-from src.utils import format_message
+from src.bootstrap.utils import format_message
 
 
 # Class responsible to stream tokens to the front end.

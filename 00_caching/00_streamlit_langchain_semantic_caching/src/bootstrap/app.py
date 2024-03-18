@@ -6,8 +6,9 @@ from pathlib import Path
 import streamlit as st
 from langchain_core.messages import HumanMessage, AIMessage
 
-from src.init_llm_helper import get_llm_impl, LLMModel
-from src.utils import format_message, get_bot_message_container
+from src.bootstrap.init_llm_helper import get_llm_impl
+from src.bootstrap.langchain_helper.model_config import LLMModel
+from src.bootstrap.utils import format_message, get_bot_message_container
 
 
 ### Function definitions - START

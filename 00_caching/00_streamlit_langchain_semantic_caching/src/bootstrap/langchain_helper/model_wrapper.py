@@ -7,15 +7,15 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import format_document, PromptTemplate
 from langchain_core.runnables import RunnableParallel, RunnablePassthrough, RunnableLambda
 
-from src.langchain_helper.model_config import ModelConfig
-from src.init_llm_helper import LLMModel
-from src.langchain_helper.prompts import CONDENSE_QUESTION_PROMPT, QA_PROMPT
+from src.bootstrap.langchain_helper.model_config import ModelConfig, LLMModel
+from src.bootstrap.langchain_helper.prompts import CONDENSE_QUESTION_PROMPT, QA_PROMPT
 
 DEFAULT_DOCUMENT_PROMPT = PromptTemplate.from_template(template="{page_content}")
 
 
 class ModelWrapper:
     def __init__(self, config: ModelConfig):
+        self.llm = None
         self.model_type = config.llm_model_type
         self.secrets = config.secrets
         self.callback_handler = config.callback_handler

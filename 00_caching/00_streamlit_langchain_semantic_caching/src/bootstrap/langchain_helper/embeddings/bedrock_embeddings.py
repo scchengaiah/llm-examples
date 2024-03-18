@@ -6,6 +6,7 @@ from langchain_community.embeddings import BedrockEmbeddings
 class AWSBedrockEmbeddings:
 
     def __init__(self):
+        self._embeddings = None
         self._validate_aws_env_variables()
         self._region_name = os.environ["AWS_REGION"]
         self._model_id = os.environ["AWS_LLM_EMBEDDINGS_ID"]
