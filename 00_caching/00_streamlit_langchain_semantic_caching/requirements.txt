@@ -10,3 +10,4 @@ python-dotenv==1.0.1
 faiss-cpu==1.8.0
 gptcache==0.1.43
 SQLAlchemy-Utils==0.41.2
+psycopg[binary]==3.1.18
