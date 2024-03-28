@@ -6,11 +6,10 @@ from src.bootstrap.langchain_helper.embeddings.bedrock_embeddings import AWSBedr
 from src.bootstrap.langchain_helper.model_config import ModelConfig, LLMModel
 from src.bootstrap.langchain_helper.model_wrapper import ModelWrapper
 from src.custom.vectorstore.pinecone_search import get_pinecone_vector_store
-from langchain_core.globals import set_llm_cache
-from src.custom.caching.postgresql_semantic_cache import PostgreSQLSemanticCache
+from src.custom.caching.postgresql_semantic_cache_retrieval_qa import PostgreSQLSemanticCacheRetrievalQA
 
 
-class CustomLangchainImpl(AbstractConversationalChain):
+class CustomLangchainImplWithPineConeVectorStore(AbstractConversationalChain):
 
     def __init__(self, model_type:LLMModel):
         self._chain = None
@@ -21,7 +20,7 @@ class CustomLangchainImpl(AbstractConversationalChain):
         embeddings = AWSBedrockEmbeddings()
 
         # Enable Caching
-        set_llm_cache(PostgreSQLSemanticCache(embeddings=AWSBedrockEmbeddings()))
+        set_llm_cache(PostgreSQLSemanticCacheRetrievalQA(embeddings=AWSBedrockEmbeddings()))
 
         vectorstore = get_pinecone_vector_store(embeddings.embeddings)
 
