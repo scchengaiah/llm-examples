@@ -19,9 +19,6 @@ class CustomLangchainImplWithPineConeVectorStore(AbstractConversationalChain):
     def init_chain(self):
         embeddings = AWSBedrockEmbeddings()
 
-        # Enable Caching
-        set_llm_cache(PostgreSQLSemanticCacheRetrievalQA(embeddings=AWSBedrockEmbeddings()))
-
         vectorstore = get_pinecone_vector_store(embeddings.embeddings)
 
         config = ModelConfig(

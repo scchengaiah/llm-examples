@@ -1,12 +1,11 @@
-from typing import Any, Optional, List
 import os
+from typing import Any, Optional
 
 import psycopg
-from langchain_core.caches import RETURN_VAL_TYPE, BaseCache
+from langchain_core.caches import RETURN_VAL_TYPE
 from langchain_core.embeddings import Embeddings
 from langchain_core.load.dump import dumps
 from langchain_core.load.load import loads
-
 
 DB_INIT_SQL = """
 CREATE TABLE IF NOT EXISTS public.langchain_semantic_cache(
@@ -56,7 +55,7 @@ def _init_db():
             cursor.execute(DB_INIT_SQL)
 
 
-class PostgreSQLSemanticCache(BaseCache):
+class PostgreSQLSemanticCacheRetrievalQA():
 
     def __init__(self, embeddings: Embeddings, score_threshold: float = 0.7, top_k: int = 1):
         self.embeddings = embeddings
@@ -64,7 +63,7 @@ class PostgreSQLSemanticCache(BaseCache):
         self.top_k = top_k
         _init_db()
 
-    def lookup(self, prompt: str, llm_string: str) -> Optional[RETURN_VAL_TYPE]:
+    def lookup(self, prompt: str) -> Optional[RETURN_VAL_TYPE]:
         prompt_content = get_prompt_content(prompt)
         with get_postgres_conn() as conn:
             with conn.cursor() as cursor:
@@ -91,7 +90,7 @@ class PostgreSQLSemanticCache(BaseCache):
 
         return None
 
-    def update(self, prompt: str, llm_string: str, return_val: RETURN_VAL_TYPE) -> None:
+    def update(self, prompt: str, return_val: RETURN_VAL_TYPE) -> None:
         prompt_content = get_prompt_content(prompt)
         with get_postgres_conn() as conn:
             with conn.cursor() as cursor:
