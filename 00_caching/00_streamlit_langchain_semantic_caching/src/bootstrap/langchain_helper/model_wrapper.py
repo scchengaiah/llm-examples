@@ -1,11 +1,12 @@
+import os
 from operator import itemgetter
 
-from langchain_openai import ChatOpenAI
 from langchain_community.chat_models.bedrock import BedrockChat
 from langchain_core.messages import get_buffer_string
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import format_document, PromptTemplate
 from langchain_core.runnables import RunnableParallel, RunnablePassthrough, RunnableLambda
+from langchain_openai import AzureChatOpenAI
 
 from src.bootstrap.langchain_helper.model_config import ModelConfig, LLMModel
 from src.bootstrap.langchain_helper.prompts import CONDENSE_QUESTION_PROMPT, QA_PROMPT
@@ -28,10 +29,12 @@ class ModelWrapper:
             self.setup_claude()
 
     def setup_gpt(self):
-        self.llm = ChatOpenAI(
-            model_name="gpt-3.5-turbo-0125",
+        self.llm = AzureChatOpenAI(
+            azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
+            deployment_name=os.getenv("AZURE_LLM_MODEL_DEPLOYMENT_NAME"),
+            openai_api_key=os.getenv("AZURE_API_KEY"),
+            openai_api_version=os.getenv("AZURE_API_VERSION"),
             temperature=0,
-            api_key=self.secrets["OPENAI_API_KEY"],
             max_tokens=1000,
             streaming=True
         )

@@ -58,7 +58,7 @@ def _init_db():
 
 class PostgreSQLSemanticCache(BaseCache):
 
-    def __init__(self, embeddings: Embeddings, score_threshold: float = 0.7, top_k: int = 3):
+    def __init__(self, embeddings: Embeddings, score_threshold: float = 0.7, top_k: int = 1):
         self.embeddings = embeddings
         self.score_threshold = score_threshold
         self.top_k = top_k
