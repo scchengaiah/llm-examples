@@ -55,7 +55,7 @@ def _init_db():
             cursor.execute(DB_INIT_SQL)
 
 
-class PostgreSQLSemanticCacheRetrievalQA():
+class PostgreSQLSemanticCache():
 
     def __init__(self, embeddings: Embeddings, score_threshold: float = 0.7, top_k: int = 1):
         self.embeddings = embeddings
