@@ -14,5 +14,5 @@ from src.custom.impl.custom_conversational_chain_pinecone import CustomLangchain
 
 
 def get_llm_impl(model_type: LLMModel) -> AbstractConversationalChain:
-    # return CustomLangchainImplWithPineConeVectorStore(model_type=model_type)
-    return DefaultLangchainImpl(model_type=model_type)
+    return CustomLangchainImplWithPineConeVectorStore(model_type=model_type)
+    # return DefaultLangchainImpl(model_type=model_type)

@@ -16,8 +16,15 @@ class AbstractConversationalChain(ABC):
         pass
 
     @abstractmethod
-    def get_chain(self):
+    def stream_response(self, query, **kwargs):
         """
-        Return the initialized chain object that is responsible to accept user inputs and generate responses.
+        Stream the response from the LLM Chain.
+        """
+        pass
+
+    @abstractmethod
+    def fetch_response(self, query, **kwargs):
+        """
+        Fetch the complete response from the LLM Chain.
         """
         pass

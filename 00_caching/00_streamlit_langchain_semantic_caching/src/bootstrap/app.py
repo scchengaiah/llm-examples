@@ -5,6 +5,7 @@ from pathlib import Path
 
 import streamlit as st
 from langchain_core.messages import HumanMessage, AIMessage
+from langchain_core.tracers import ConsoleCallbackHandler
 
 from src.bootstrap.init_llm_helper import get_llm_impl
 from src.bootstrap.langchain_helper.model_config import LLMModel
@@ -142,7 +143,7 @@ for message in st.session_state.messages:
     )
 
 # Initialize LLM related variables.
-chain = get_llm_impl(model_type=LLMModel(st.session_state["model"])).get_chain()
+llm_impl = get_llm_impl(model_type=LLMModel(st.session_state["model"]))
 
 # Invoke the LLM by comparing the role of the last message.
 if ("messages" in st.session_state and
@@ -165,19 +166,18 @@ if ("messages" in st.session_state and
         content_placeholder.markdown(loading_message_content, unsafe_allow_html=True)
 
         # Streaming Implementation
-        for s in chain.stream(chain_argument):
+        for s in llm_impl.stream_response(chain_argument):
             token_buffer.append(s.content)
             complete_message = "".join(token_buffer)
             container_content = get_bot_message_container(complete_message)
             content_placeholder.markdown(container_content, unsafe_allow_html=True)
 
         # Normal Implementation
-        #result = chain.invoke(chain_argument, config={'callbacks': [ConsoleCallbackHandler()]})
-        #token_buffer.append(result.content)
-        #complete_message = "".join(token_buffer)
-        #container_content = get_bot_message_container(complete_message)
-        #content_placeholder.markdown(container_content, unsafe_allow_html=True)
-
+        # result = llm_impl.fetch_response(chain_argument, config={'callbacks': [ConsoleCallbackHandler()]})
+        # token_buffer.append(result.content)
+        # complete_message = "".join(token_buffer)
+        # container_content = get_bot_message_container(complete_message)
+        # content_placeholder.markdown(container_content, unsafe_allow_html=True)
 
         append_message(complete_message)
 
