@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS public.langchain_semantic_cache(
     prompt TEXT,
     prompt_embedding vector(1536),
     response TEXT,
+    metadata JSONB,
     created_at timestamp default current_timestamp
 );
 

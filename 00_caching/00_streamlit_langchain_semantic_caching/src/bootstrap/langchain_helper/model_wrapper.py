@@ -17,6 +17,8 @@ DEFAULT_DOCUMENT_PROMPT = PromptTemplate.from_template(template="{page_content}"
 class ModelWrapper:
     def __init__(self, config: ModelConfig):
         self.llm = None
+        # For augmenting follow-up question based on chat history.
+        self.condense_llm = None
         self.model_type = config.llm_model_type
         self.secrets = config.secrets
         self.callback_handler = config.callback_handler
@@ -36,7 +38,20 @@ class ModelWrapper:
             openai_api_version=os.getenv("AZURE_API_VERSION"),
             temperature=0,
             max_tokens=1000,
-            streaming=True
+            streaming=True,
+            metadata={"is_condense_llm": False} # Metadata to isolate logic during callback implementations.
+        )
+
+        # Augment follow-up question based on chat history.
+        self.condense_llm = AzureChatOpenAI(
+            azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
+            deployment_name=os.getenv("AZURE_LLM_MODEL_DEPLOYMENT_NAME"),
+            openai_api_key=os.getenv("AZURE_API_KEY"),
+            openai_api_version=os.getenv("AZURE_API_VERSION"),
+            temperature=0,
+            max_tokens=1000,
+            streaming=True,
+            metadata = {"is_condense_llm": True} # Metadata to isolate logic during callback implementations.
         )
 
     def setup_claude(self):
@@ -44,7 +59,17 @@ class ModelWrapper:
             region_name=self.secrets["AWS_REGION"],
             model_id=self.secrets["AWS_LLM_ID"],
             model_kwargs={"temperature":0, "max_tokens":1000},
-            streaming=True
+            streaming=True,
+            metadata={"is_condense_llm": False} # Metadata to isolate logic during callback implementations.
+        )
+
+        # Augment follow-up question based on chat history.
+        self.condense_llm = BedrockChat(
+            region_name=self.secrets["AWS_REGION"],
+            model_id=self.secrets["AWS_LLM_ID"],
+            model_kwargs={"temperature": 0, "max_tokens": 1000},
+            streaming=True,
+            metadata={"is_condense_llm": True} # Metadata to isolate logic during callback implementations.
         )
 
     def get_chain(self, vectorstore):
@@ -61,7 +86,7 @@ class ModelWrapper:
                     chat_history=lambda x: get_buffer_string(x["chat_history"])
                 )
                                     | CONDENSE_QUESTION_PROMPT
-                                    | self.llm
+                                    | self.condense_llm
                                     | StrOutputParser(),
             )
             # Takes the standalone question as the input and the context as the vectorstore.

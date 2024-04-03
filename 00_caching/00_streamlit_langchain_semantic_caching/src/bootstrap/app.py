@@ -174,6 +174,8 @@ if ("messages" in st.session_state and
 
         # Normal Implementation
         # result = llm_impl.fetch_response(chain_argument, config={'callbacks': [ConsoleCallbackHandler()]})
+        # Without callbacks
+        # result = llm_impl.fetch_response(chain_argument)
         # token_buffer.append(result.content)
         # complete_message = "".join(token_buffer)
         # container_content = get_bot_message_container(complete_message)
