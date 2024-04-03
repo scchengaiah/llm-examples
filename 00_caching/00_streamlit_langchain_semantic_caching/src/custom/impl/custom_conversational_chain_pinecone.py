@@ -29,7 +29,7 @@ class CustomLangchainImplWithPineConeVectorStore(AbstractConversationalChain):
         self._chain= model.get_chain(vectorstore)
 
     def stream_response(self, query, **kwargs):
-        return self._chain.stream(query, **kwargs)
+        yield from self._chain.stream(query, **kwargs)
 
     def fetch_response(self, query, **kwargs):
         return self._chain.invoke(query, **kwargs)
