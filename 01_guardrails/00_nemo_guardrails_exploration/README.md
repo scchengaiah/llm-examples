@@ -8,7 +8,7 @@ Examples present inside [01_langchain_related_examples](./01_langchain_related_e
 
 [NeMo Guardrails: The Missing Manual](https://www.pinecone.io/learn/nemo-guardrails-intro/)
 
-[NeMo Guardrails - Github][https://github.com/NVIDIA/NeMo-Guardrails]
+[NeMo Guardrails - Github](https://github.com/NVIDIA/NeMo-Guardrails)
 
 [Colang Language Syntax Guide](https://github.com/NVIDIA/NeMo-Guardrails/blob/develop/docs/user_guides/colang-language-syntax-guide.md)
 
