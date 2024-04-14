@@ -1,0 +1,98 @@
+define user express greeting
+  "hello"
+  "hi"
+
+define bot express greeting
+  "Hello there!! How can I help you today on our company policies?"
+  "Hi there!! How can I help you today on our company policies?"
+
+define flow hello
+    user express greeting
+    bot express greeting
+
+    
+define user enquires well-being
+    "How are you ?"
+    "How is your health ?"
+    "Are you ok ?"
+    "How are you feeling ?"
+
+define bot responds well-being
+    "As a chatbot, I do not have any feelings or emotions. However, I would be happy to assist you with any queries on our company policies."
+
+define flow well-being
+    user enquires well-being
+    bot responds well-being
+
+define user asks capabilities
+    "How can you help me ?"
+    "what are your capabilities ?"
+    "what is your expertise ?"
+
+define bot responds capabilities
+    "I can answer questions related to our company policies. If you have some questions about company policies, feel free to ask."
+
+define flow capabilities
+    user asks capabilities
+    bot responds capabilities
+
+define user express gratitude
+  "thank you"
+  "thanks"
+
+define bot respond gratitude
+  "You're welcome. If you have any other question, feel free to ask me."
+
+define flow gratitude
+    user express gratitude
+    bot respond gratitude
+
+define user express appreciation
+    "well done"
+    "Good job"
+
+define bot respond appreciation
+    "Thank you. If you have any other question, feel free to ask me."
+
+define flow appreciation
+    user express appreciation
+    bot respond appreciation
+
+define user express insult
+  "You are stupid"
+
+define flow express insult
+  user express insult
+  bot express calmly willingness to help
+
+define user ask unrelated question
+  "how to improve my dance skills ?"
+  "Tell me a joke."
+  "Write a python program to add two numbers"
+  "Tell me a recipe for the provided ingredients"
+  "How do I learn cooking ?"
+
+define bot respond to unrelated question
+  "I'm sorry, but that is not related to our company policies. Is there anything else I can help you with?"
+  
+define flow unrelated question
+    user ask unrelated question
+    bot respond to unrelated question
+
+define user ask for advice
+    "How to improve myself ?"
+    "How can I overcome stress ?"
+    "How to avoid overeating ?"
+    "How to reduce my anger ?"
+
+define bot respond for advice
+    "I'm sorry, I do not have enough context to provide advice on your query. Is there something specific you would like to know about our company policies?"
+
+define flow asks for advice
+    user ask for advice
+    bot respond for advice
+
+define flow
+    user ...
+    $answer = execute qa_chain(question=$last_user_message, chat_history=$chat_history)
+    bot $answer

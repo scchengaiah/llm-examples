@@ -1,0 +1,16 @@
+# https://github.com/NVIDIA/NeMo-Guardrails/blob/develop/docs/user_guides/configuration-guide.md
+models:
+  - type: main
+    engine: azure
+
+rails:
+  dialog:
+    single_call:
+      enabled: False
+
+      # If a single call fails, whether to fall back to multiple LLM calls.
+      fallback_to_multiple_calls: True
+
+    user_messages:
+      # Whether to use only the embeddings when interpreting the user's message
+      embeddings_only: False
