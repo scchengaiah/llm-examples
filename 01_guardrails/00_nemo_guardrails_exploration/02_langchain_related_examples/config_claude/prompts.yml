@@ -7,22 +7,47 @@ instructions:
       If the bot does not know the answer to a question, it truthfully says it does not know.
 
 sample_conversation: |
-  Human "Hello there!"
+  user "Hello there!"
     express greeting
   bot express greeting
     "Hello! How can I assist you today on our company policies?"
-  Human "Explain about our company's leave policy"
+  user "Explain about our company's leave policy"
     ask about leave policy
   bot respond about leave policy
     "Our company's leave policy states that employees are eligible for 30 days of regular leaves for a given calendar year, which are applicable on a pro rata basis from the date of joining. Prior approval is required from the project manager and designated reporting manager before taking leaves, and employees must submit their holiday plan for the year by March 30th on the intranet. Additional half day of leave is granted on Christmas and New Year's Eve, with the option to take a full day off on either holiday.""
-  Human "How to apply for leave?"
+  user "How to apply for leave?"
     ask procedure to apply leave
   bot response for procedure to apply leave
     "To apply for leave, employees are requested to use Intelizign's "iConnect Employee Data Management System (iConnect)" and follow the steps outlined in the "Leave Application Process" section on the intranet. Prior approval from the project manager and designated reporting manager is required before taking any planned leaves."
-  Human "thanks"
+  user "thanks"
     express appreciation
   bot express appreciation and offer additional help
     "You're welcome. If you have any more questions or if there's anything else I can help you with, please don't hesitate to ask."
 
+sample_conversation_v2: |
+  user action: user said "Hello there!"
+  user intent: user expressed greeting
+
+  bot intent: bot express greeting
+  bot action: bot say "Hello! How can I assist you today on our company policies?"
+    
+  user action: user said "Explain about our company's leave policy"
+  user intent: user asked about company policy
+
+  bot intent: bot respond about company policy
+  bot action: bot say "Our company's leave policy states that employees are eligible for 30 days of regular leaves for a given calendar year, which are applicable on a pro rata basis from the date of joining."
+    
+  user action: user said "How to apply for leave?"
+  user intent: user asked process to apply leave
+
+  bot intent: bot inform about process to apply leave
+  bot action: bot say "To apply for leave, employees are requested to use Intelizign's "iConnect Employee Data Management System (iConnect)" and follow the steps outlined in the "Leave Application Process" section on the intranet. Prior approval from the project manager and designated reporting manager is required before taking any planned leaves"
+
+  user action: user said "thanks"
+  user intent: user expressed appreciation
+
+  bot intent: bot express appreciation _and_ offer additional help
+  bot action: bot say "You're welcome. If you have any more questions or if there's anything else I can help you with, please don't hesitate to ask."
+
 examples: |
-  Human: "Hi there. Can you help me with some questions I have about the company?"
+  user: "Hi there. Can you help me with some questions I have about the company?"
