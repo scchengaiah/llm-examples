@@ -8,7 +8,7 @@ from langchain_core.load import dumps, loads
 from langchain_core.messages import get_buffer_string, HumanMessage, AIMessage
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import PromptTemplate, format_document
-from langchain_core.runnables import RunnableConfig, RunnableParallel, RunnablePassthrough
+from langchain_core.runnables import RunnableConfig, RunnableParallel, RunnablePassthrough, RunnableLambda
 
 load_dotenv(dotenv_path="../.env")
 
@@ -28,24 +28,27 @@ bot_streaming_handler = ContextVar("bot_streaming_handler", default=None)
 model_id="anthropic.claude-3-haiku-20240307-v1:0"
 #model_id="anthropic.claude-instant-v1"
 
+QUERY = "No need of any help,"
+
 ###### Prompt Template
-CONDENSE_QUESTION_PROMPT_STR = """Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question, in English language. Avoid presenting empty standalone questions. If ambiguity arises, retain the follow up question as is. Do not include any other content other than the rephrased question.
-
-Chat History:
-{chat_history}
-Follow Up Input: {question}
-Standalone question:"""
-CONDENSE_QUESTION_PROMPT = ChatPromptTemplate.from_template(CONDENSE_QUESTION_PROMPT_STR)
-
-QA_PROMPT_STR = """You are a friendly chatbot assistant that responds in a conversational manner to users' question on company's policies. 
-Respond in 1-2 complete sentences, unless specifically asked by the user to elaborate on something. Use "Context" to inform your answers.
-Do not make up answers if the question is out of "Context". Do not respond with any general information or advice that is not related to the context.
-If the "Question" is not clear, then refer to the "Chat History" and respond appropriately.
-If the "Question" is a greeting or a compliment, then respond appropriately without considering the context.
+CONDENSE_QUESTION_PROMPT_STR = """Given the following "Chat History" and a "Follow Up question", rephrase the "Follow Up question" to be a "Standalone question", in English language. Avoid presenting empty "Standalone question". If ambiguity arises, retain the "Follow Up question" as the "Standalone question". Do not include any other content other than the "Standalone question". Note that if the "Follow Up question" is a greeting or a compliment or denotes a end of conversation, then retain the "Follow Up question" as the "Standalone question".
 
 ---
 Chat History:
 {chat_history}
+---
+Follow Up question:
+{question}
+---
+Standalone question:
+"""
+CONDENSE_QUESTION_PROMPT = ChatPromptTemplate.from_template(CONDENSE_QUESTION_PROMPT_STR)
+
+QA_PROMPT_STR = """You are a professional chatbot assistant that responds in a conversational manner to employee's question on company's policies. 
+Respond in 1-2 complete sentences, unless specifically asked by the user to elaborate on something. Use the provided "Context" to inform your answers.
+Do not make up answers if the question is out of "Context". Do not respond with any general information or advice that is not related to the "Context".
+If the "Question" is a greeting or a compliment or denotes the end of conversation, then respond to the same without considering the provided "Context".
+
 ---
 Context:
 {context}
@@ -249,10 +252,10 @@ async def execute_chain():
     # Takes the standalone question as the input and the context as the vectorstore.
     # Confine our retrieval to Germany policies loaded.
     search_kwargs = {"filters": "location eq 'Germany'", "k": 3}
+
     context = {
         "context": itemgetter("question") | vector_store.as_retriever(search_kwargs=search_kwargs) | combine_documents,
-        "question": lambda x: x["question"],
-        "chat_history": lambda x: x["chat_history"]
+        "question": lambda x: x["question"]
     }
 
     inputs = RunnableParallel(
@@ -264,10 +267,8 @@ async def execute_chain():
                  | StrOutputParser(),
     )
 
-    chain_with_follow_up_question = inputs | context | QA_PROMPT | model
-    chain_without_follow_up_question = context | QA_PROMPT | model
 
-    query = "Hello"
+
     chat_history = [
         HumanMessage(content="Explain our company's leave policy ?"),
         AIMessage(
@@ -279,10 +280,20 @@ async def execute_chain():
 
     #chat_history = []
 
-    print(f"Executing query: {query}")
+    def log_standalone_question(x):
+        print(f"Standalone question: {x}")
+        return x
+        print(f"Standalone question: {question}")
+    if len(chat_history) > 0:
+        print("Using chain WITH Condense question call")
+        chain = inputs | RunnableLambda(lambda x: log_standalone_question(x)) | context | QA_PROMPT | model
+    else:
+        print("Using chain WITHOUT Condense question call")
+        chain = context | QA_PROMPT | model
 
-    result = chain_without_follow_up_question.invoke({"question": query,
-                                                      "chat_history": chat_history})
+    print(f"Executing query: {QUERY}")
+
+    result = chain.invoke({"question": QUERY, "chat_history": chat_history})
     print("\n")
     print("RESULT:")
     print(result.content)
