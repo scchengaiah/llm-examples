@@ -1,6 +1,9 @@
 # Using older version since OpenAI has updated assistants to V2 that is not compatible with Azure OpenAI
 # https://github.com/VRSEN/agency-swarm/issues/123
-agency-swarm==0.1.7
+# agency-swarm==0.1.7
+agency-swarm
+tavily-python
+duckduckgo-search
 python-dotenv
 # For windows based systems
 pyreadline3

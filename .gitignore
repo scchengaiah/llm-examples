@@ -19,3 +19,4 @@ __pycache__
 .cache
 
 temp
+settings.json
