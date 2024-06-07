@@ -4,7 +4,7 @@ LLM's are good at summarization when provided a piece of larger text. The size o
 
 We have several techniques that can be incorporated to improve the summarization that shall be explained in this exploration.
 
-We begin with simple summarization techniques such as followed by the advanced techniques such as `Auto Refinement` and `Multi Document Summarization`.
+We begin with simple summarization techniques such as `Stuff It` and `Chunk It` followed by the advanced techniques such as `Auto Refinement` and `Multi Document Summarization`.
 
 Refer to the [references](#references) section for related blogs.
 
