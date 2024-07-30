@@ -1,7 +1,11 @@
 # Using older version since OpenAI has updated assistants to V2 that is not compatible with Azure OpenAI
 # https://github.com/VRSEN/agency-swarm/issues/123
 # agency-swarm==0.1.7
-agency-swarm
+
+# Latest version(0.2.6) has parallel_tool_calls enabled which is not supported by Azure OpenAI.
+# Azure OpenAI is not keeping up with the OpenAI API changes which is making it difficult to use this framework's
+# latest version.
+agency-swarm==0.2.5
 tavily-python
 duckduckgo-search
 python-dotenv
