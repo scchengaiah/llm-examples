@@ -161,10 +161,10 @@ def extract_docx_content_in_chunks(docx_path, output_folder):
 
 
 if __name__ == "__main__":
-    docx_path = "D:/OneDrive - IZ/MxIoT-Documents/Projects/GenAI-Intelizign/RequirementGenerator/ExampleDocs/BankingRequirements.docx"  # Replace with your input docx file path
-    #docx_path = "D:/OneDrive - IZ/MxIoT-Documents/Projects/GenAI-Intelizign/RequirementGenerator/ExampleDocs/appendix_6m_tool_requirement_specifications_v2_project_portfolio_management_tool.docx"  # Replace with your input docx file path
+    #docx_path = "D:/OneDrive - IZ/MxIoT-Documents/Projects/GenAI-Intelizign/RequirementGenerator/ExampleDocs/BankingRequirements.docx"  # Replace with your input docx file path
+    docx_path = "D:/OneDrive - IZ/MxIoT-Documents/Projects/GenAI-Intelizign/RequirementGenerator/ExampleDocs/appendix_6m_tool_requirement_specifications_v2_project_portfolio_management_tool.docx"  # Replace with your input docx file path
     output_folder = "D:/OneDrive - IZ/MxIoT-Documents/Projects/GenAI-Intelizign/RequirementGenerator/ExampleDocs/output"
     
-    #markdown_file = extract_docx_content(docx_path, output_folder)
-    markdown_file = extract_docx_content_in_chunks(docx_path, output_folder)
+    markdown_file = extract_docx_content(docx_path, output_folder)
+    #markdown_file = extract_docx_content_in_chunks(docx_path, output_folder)
     print(f"Markdown file generated: {markdown_file}")

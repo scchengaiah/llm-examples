@@ -110,6 +110,17 @@ As a Senior Business Analyst, you have an expertise in reviewing the work of you
 4. Ignore any information from the final output that cannot be classified as a requirement or is just a information to the implementor.
 """
 
+senior_business_analyst_instructions_latest = """
+As a senior business analyst, you have an expertise in understanding customer specification for product/software development and extracting requirements from them.
+
+Important points to consider:
+- The customer specification shall be provided to you in markdown format.
+- Tables formatted in markdown can sometime be inconsistent, so always ensure that you adjust yourself accordingly.
+- The customer specification may contain some general or project management related information in addition to requirements. It is your responsibility to differentiate between them and extract only the requirements.
+- Always double check your response before submitting to the customer and ensure it contains only the requirements and not any other information that is not implementable.
+- Present the extracted requirements in table format. Make sure that you are categorizing the requirement based on its content and also number them for better readability.
+"""
+
 
 junior_business_analyst_agent = Agent(name="Junior Business Analyst",
             description="Responsible for data extraction and requirement generation.",
@@ -128,8 +139,7 @@ senior_business_analyst_agent = Agent(name="Senior Business Analyst",
 
 
 agency = Agency([
-    senior_business_analyst_agent,
-    [senior_business_analyst_agent, junior_business_analyst_agent]
+    senior_business_analyst_agent
 ])
 
 agency.run_demo()
