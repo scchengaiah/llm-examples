@@ -67,3 +67,9 @@ Feel free to modify the bootstrap implementation if any of the implementations c
 ### How to debug a Streamlit application from Pycharm
 
 ![](assets/20240314_115635_image.png)
+
+## References
+
+### RAG Related
+
+[5 Levels of text splitting for efficient RAG - An interesting and informative blog with several citations](https://github.com/FullStackRetrieval-com/RetrievalTutorials/blob/a4570f3c4883eb9b835b0ee18990e62298f518ef/tutorials/LevelsOfTextSplitting/5_Levels_Of_Text_Splitting.ipynb) - [Local Copy](./04_advanced_rag/01_5_Levels_Of_Text_Splitting.ipynb)
