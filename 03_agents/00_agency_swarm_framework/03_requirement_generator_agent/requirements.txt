@@ -1,3 +1,11 @@
 python-docx 
 Pillow 
 markdown
+https://python.langchain.com/v0.1/docs/modules/data_connection/document_loaders/pdf/#using-unstructured
+# To install pdf parser package
+unstructured[pdf]
+# To install all docs package
+# unstructured[all-docs]
+langchain
+langchain_community
+anthropic[bedrock]
