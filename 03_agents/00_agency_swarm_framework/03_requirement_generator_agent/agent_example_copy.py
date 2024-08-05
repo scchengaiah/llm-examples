@@ -70,10 +70,14 @@ ceo_instructions = """
 As a CEO of a successful startup, you are responsible to receive requirements from the reputed customers and deliver the requirements with high quality. 
 
 ## Core Responsibilites:
-1. Delegate tasks to the appropriate team based on the requirements.
+1. Delegate tasks to the appropriate team based on the requirements. Your team has relevant tools to complete a given task.
 2. Provide feedback to the team to correct or improve the deliverables.
 3. Ensure that the deliverables are matching the customer requirements.
-4. Your response to the customer is final and the customer may not be able to provide feedback. Hence, perform a quality check on the deliverables before submitting the final response to the customer."""
+4. Your response to the customer is final and the customer may not be able to provide feedback. Hence, perform a quality check on the deliverables before submitting the final response to the customer.
+
+IF YOU DO NOT HAVE CONTEXT FOR A GIVEN QUESTION/REQUIREMENT. INFORM THE USER ABOUT IT POLITELY. DO NOT HALLUCINATE WITH GENERAL INFORMATION.
+
+"""
 
 senior_business_analyst_instructions = """
 As a Senior business analyst of a successful startup, you are highly capable to understand the customer requirements and take appropriate actions to deliver high quality output.
@@ -93,7 +97,13 @@ A large document from the customer has been carefully parsed into multiple chunk
 2. Keep the relevant part of the information and ignore unnecessary information that is not relevant to the requirement.
 3. The text may contain lot of other additional information that may not be required to satisfy the given requirement. You can ignore such text.
 4. It is highly important that you go through all the file chunks, remember the context and prepare your final response for the given requirements.
-5. If in case, the consolidated text from all file chunks does not fit in your context window, then accordingly summarize the information from multiple chunks without losing the essential context and preare the final response.
+5. If in case, the consolidated text from all file chunks does not fit in your context window, then accordingly summarize the information from multiple chunks without losing the essential context and prepare the final response.
+
+IF YOU DO NOT HAVE CONTEXT OR KNOW ANSWER TO A QUESTION, INFORM THE USER ABOUT IT POLITELY. DO NOT HALLUCINATE WITH GENERAL INFORMATION.
+
+## Respone format:
+1. Format your response in a presentable format.
+
 """
 
 
@@ -117,7 +127,11 @@ agency = Agency([
     [ceo_agent, senior_business_analyst_agent]
 ])
 
+# Test via Terminal
 agency.run_demo()
+
+# Test via Gradio App
+# agency.demo_gradio(share=True)
 
 # PRE-PROMPT:
 # There is a large document that is chunked into several files residing within the folder D:\tmp\unstructured\pdfImages2\chunks. You will be given a requirement from the customer based on which you traverse through these chunks and deliver relevant response to the customer.# Requirement from the customer:\n 
@@ -129,9 +143,16 @@ agency.run_demo()
 # QUESTION 2:
 # Can you explain the responsibility matrix section in detail ?
 
+USER_QUESTION = "Can you explain the responsibility matrix section in detail ?"
 
-# The instructions are asking for feedback so, let us not use completion for now.
+CHUNK_LOCATION = "D:/tmp/unstructured/pdfImages2/chunks"
 
-#result =agency.get_completion(message= "Could you generate requirements for the data present in the folder path - D:\OneDrive - IZ\MxIoT-Documents\Projects\GenAI-Intelizign\RequirementGenerator\ExampleDocs\output ?")
-#
-#print(result)
+FINAL_PROMPT = f"There is a large document that is chunked into several files residing within the folder {CHUNK_LOCATION}. You will be given a requirement from the customer based on which you traverse through these chunks and deliver relevant response to the customer.# Requirement from the customer:\n{USER_QUESTION}"
+
+# Prepare FINAL_PROMPT for the first message. All follow-up questions can be directly passed to the agent since the
+# thread is already initialized.
+# result = agency.get_completion(message= FINAL_PROMPT)
+# print(result)
+
+
+

@@ -24,6 +24,8 @@ print(f"Env loaded: {env_loaded}")
 # Downloaded from - https://github.com/UB-Mannheim/tesseract/releases
 
 FILE_PATH = "D:/gitlab/learnings/artificial-intelligence/llm-examples/03_agents/00_agency_swarm_framework/03_requirement_generator_agent/resources/Scale_NCA_RFP_PLM.pdf"
+FILE_PATH = "D:/tmp/appendix_6m_tool_requirement_specifications_v2_project_portfolio_management_tool.pdf"
+FILE_PATH = "C:/Users/20092/Documents/Temp/pdftoocr/pngtopdf_2.pdf"
 
 # Unstructured via langchain framework.
 def langchain_example():
@@ -66,7 +68,7 @@ def image_to_base64(image_path):
 def fetch_image_description(b64_image_data, media_type="image/jpeg"):
     resp = anthropic_client.messages.create(
         model=HAIKU_MODEL_ID,
-        max_tokens=1024,
+        max_tokens=4096,
         messages=[
             {
                 "role": "user",
@@ -94,7 +96,7 @@ def fetch_image_description(b64_image_data, media_type="image/jpeg"):
 def convert_table_to_html(b64_image_data, media_type="image/jpeg"):
     resp = anthropic_client.messages.create(
             model=SONNET_MODEL_ID,
-            max_tokens=1024,
+            max_tokens=4096,
             messages=[
                 {
                     "role": "user",
@@ -155,10 +157,8 @@ pdf_elements = partition_pdf(filename=FILE_PATH,
                              extract_image_block_to_payload=True,
                              # Below argument shall output images to the specified path 
                              # only if extract_image_block_to_payload is set to False 
-                             extract_image_block_output_dir="D:/tmp/unstructured/pdfImages2/"
+                             extract_image_block_output_dir="D:/tmp/unstructured/pdfImages4/"
                             )
-
-
 
 # Filter elements that carry essential information.
 # Convert images to textual representation.
@@ -200,8 +200,11 @@ chunked_elements = chunk_by_title(
     combine_text_under_n_chars=2000,
 )
 
+chunk_output_folder = "D:/tmp/unstructured/pdfImages4_ocr/chunks"
+os.makedirs(chunk_output_folder, exist_ok=True)
+
 for i, chunk in enumerate(chunked_elements):
-    with open(f"D:/tmp/unstructured/pdfImages2/chunks/chunk_{i+1}.txt", "w", encoding="utf-8") as f:
+    with open(f"{chunk_output_folder}/chunk_{i+1}.txt", "w", encoding="utf-8") as f:
         f.write(chunk.text)
 
 # End time
