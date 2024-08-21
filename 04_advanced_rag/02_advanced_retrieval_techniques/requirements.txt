@@ -1,0 +1,10 @@
+langchain==0.2.14
+langchain-core==0.2.33
+langchain-text-splitters==0.2.2
+langchain-openai==0.1.22
+langchain-postgres==0.0.9
+pydantic_settings==2.4.0
+pydantic==2.8.2
+structlog==24.4.0
+rich==13.7.1
+PyMuPDF==1.24.9
