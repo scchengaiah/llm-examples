@@ -8,3 +8,9 @@ pydantic==2.8.2
 structlog==24.4.0
 rich==13.7.1
 PyMuPDF==1.24.9
+# The below two modules are expected to be available for successful connection to Postgres.
+# Before installing psycopg[c], make sure that the POSTGRESQL database binaries are available on the path.
+# This is essential for successful installation of this module. 
+# set PATH=%PATH%;C:\Program Files\PostgreSQL\15\bin
+psycopg[c]
+psycopg[binary]
