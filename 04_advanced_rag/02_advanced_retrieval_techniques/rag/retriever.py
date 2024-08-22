@@ -4,7 +4,7 @@ from utils.logging import get_logger
 import utils
 from db import QdrantDatabaseConnector
 from qdrant_client import models
-from rag.query_expanison import QueryExpansion
+from rag.query_expansion import QueryExpansion
 from rag.reranking import Reranker
 from rag.self_query import SelfQuery
 from sentence_transformers.SentenceTransformer import SentenceTransformer

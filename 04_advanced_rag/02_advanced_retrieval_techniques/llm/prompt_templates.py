@@ -4,13 +4,14 @@ from langchain.prompts import PromptTemplate
 from pydantic import BaseModel
 
 
+
 class BasePromptTemplate(ABC, BaseModel):
     @abstractmethod
     def create_template(self) -> PromptTemplate:
         pass
 
 
-class QueryExpansionTemplate(BasePromptTemplate):
+class QueryExpansionTemplate_OLD(BasePromptTemplate):
     prompt: str = """You are an AI language model assistant. Your task is to generate {to_expand_to_n}
     different versions of the given user question to retrieve relevant documents from a vector
     database. By generating multiple perspectives on the user question, your goal is to help
@@ -28,6 +29,35 @@ class QueryExpansionTemplate(BasePromptTemplate):
             input_variables=["question"],
             partial_variables={
                 "separator": self.separator,
+                "to_expand_to_n": to_expand_to_n,
+            },
+        )
+
+class QuestionList(BaseModel):
+    questions: list[str]
+
+class QueryExpansionTemplate(BasePromptTemplate):
+    prompt: str = """
+    You are an expert in understanding user questions to extract relevant and accurate information from the training manuals. 
+    Your task is to generate {to_expand_to_n} different versions of the given user question 
+    to retrieve relevant documents from a vector database. Always ensure that the generated questions shall be utilized to retrieve
+    relevant training manual related content stored in the vector database using distance-based similarity search. By generating multiple perspectives on the user question, 
+    your goal is to help the user overcome some of the limitations of the distance-based similarity search.
+    Provide these alternative questions as a json list. Output only the raw json and do not include any markdown formattting.
+    Example JSON Schema:
+    {json_schema_example}
+    Original question: {question}"""
+
+    @property
+    def json_schema_example(self) -> str:
+        return QuestionList.model_json_schema()
+
+    def create_template(self, to_expand_to_n: int) -> PromptTemplate:
+        return PromptTemplate(
+            template=self.prompt,
+            input_variables=["question"],
+            partial_variables={
+                "json_schema_example": self.json_schema_example,
                 "to_expand_to_n": to_expand_to_n,
             },
         )

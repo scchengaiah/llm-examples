@@ -1,8 +1,17 @@
+import sys
+import json
+
+from langchain_openai import AzureChatOpenAI, ChatOpenAI
+from pydantic import BaseModel
+from llm.prompt_templates import QueryExpansionTemplate
+from rag.query_expansion import QueryExpansion
+from rag.retriever_postgres import VectorRetriever
 from utils.logging import get_logger
 from ingestion.chunking import chunk_pdf
-from langchain_openai import AzureOpenAIEmbeddings
-from langchain_postgres import PGVector
+from utils.pgvector import vector_store
 from config import settings
+from langchain.prompts import PromptTemplate
+from openai.lib._parsing._completions import type_to_response_format_param
 
 logger = get_logger(__name__)
 
@@ -16,36 +25,28 @@ def test_structlog():
 
 
 def add_pdf_to_vector_store(pdf_file_path):
-    COLLECTION_NAME = "advanced_rag_exploration"
-    CONNECTION_STRING = PGVector.connection_string_from_db_params(
-        driver=settings.PGVECTOR_DRIVER,
-        host=settings.POSTGRES_HOST,
-        port=settings.POSTGRES_PORT,
-        database=settings.POSTGRES_DB,
-        user=settings.POSTGRES_USER,
-        password=settings.POSTGRES_PASSWORD,
-    )
-    vector_store = PGVector(
-        embeddings=azure_openai_embeddings,
-        collection_name=COLLECTION_NAME,
-        connection=CONNECTION_STRING,
-        use_jsonb = True
-    )
     md_content_chunks = chunk_pdf(pdf_file_path)
 
     print("Add documents to vector store")
     vector_store.add_texts(md_content_chunks)
 
-
-# Initialize embeddings.
-azure_openai_embeddings = AzureOpenAIEmbeddings(api_key=settings.AZURE_OPENAI_API_KEY, 
-                                                model=settings.EMBEDDING_MODEL_ID,
-                                                api_version=settings.AZURE_API_VERSION)
+def query_expansion_standalone_example():
+    query = "Is world a better place ?"
+    query_expansion = QueryExpansion()
+    generated_queries = query_expansion.generate_response(query=query, to_expand_to_n=5)
+    print(generated_queries)
 
 # Initialize PGVector collection and ingest embeddings.
 file_path = "./resources/Polarion_For_Requirement_Engineers.pdf"
 # add_pdf_to_vector_store(file_path)
 
+#query_expansion_standalone_example()
+query = """How to create a requirement ?"""
+retriever = VectorRetriever(query=query)
+hits = retriever.retrieve_top_k(k=6, to_expand_to_n_queries=5)
 
+reranked_hits = retriever.rerank(hits=hits, keep_top_k=5)
+for rank, hit in enumerate(reranked_hits):
+    logger.info(f"{rank}: {hit}")
 
 
