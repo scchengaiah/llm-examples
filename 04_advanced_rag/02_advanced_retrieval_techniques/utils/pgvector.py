@@ -1,6 +1,7 @@
 from langchain_postgres import PGVector
 from config import settings
 from utils.embeddings import azure_openai_embeddings
+from sqlalchemy.ext.asyncio import create_async_engine
 
 __COLLECTION_NAME = "advanced_rag_exploration"
 
@@ -13,9 +14,11 @@ __CONNECTION_STRING = PGVector.connection_string_from_db_params(
     password=settings.POSTGRES_PASSWORD,
 )
 
+async_engine = create_async_engine(__CONNECTION_STRING)
+
 vector_store = PGVector(
     embeddings=azure_openai_embeddings,
     collection_name=__COLLECTION_NAME,
-    connection=__CONNECTION_STRING,
+    connection=async_engine,
     use_jsonb = True
 )

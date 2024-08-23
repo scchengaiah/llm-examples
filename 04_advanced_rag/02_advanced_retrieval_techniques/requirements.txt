@@ -2,7 +2,12 @@ langchain==0.2.14
 langchain-core==0.2.33
 langchain-text-splitters==0.2.2
 langchain-openai==0.1.22
+# When using version 0.0.9, make sure to pass async SQLAlchemy engine as recommended in the below issue.
+# Issue link - https://github.com/langchain-ai/langchain-postgres/issues/100#issuecomment-2302400088
+# Also set this policy to avoid error with psycopg in windows - asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 langchain-postgres==0.0.9
+sentence-transformers==3.0.1
+transformers==4.44.2
 pydantic_settings==2.4.0
 pydantic==2.8.2
 structlog==24.4.0

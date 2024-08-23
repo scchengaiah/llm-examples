@@ -40,7 +40,8 @@ class QueryExpansionTemplate(BasePromptTemplate):
     prompt: str = """
     You are an expert in understanding user questions to extract relevant and accurate information from the training manuals. 
     Your task is to generate {to_expand_to_n} different versions of the given user question 
-    to retrieve relevant documents from a vector database. Always ensure that the generated questions shall be utilized to retrieve
+    to retrieve relevant documents from a vector database. Keep in mind that the context of the generated questions should be relevant to the Original question.
+    Always ensure that the generated questions shall be utilized to retrieve
     relevant training manual related content stored in the vector database using distance-based similarity search. By generating multiple perspectives on the user question, 
     your goal is to help the user overcome some of the limitations of the distance-based similarity search.
     Provide these alternative questions as a json list. Output only the raw json and do not include any markdown formattting.
@@ -73,14 +74,22 @@ class SelfQueryTemplate(BasePromptTemplate):
     def create_template(self) -> PromptTemplate:
         return PromptTemplate(template=self.prompt, input_variables=["question"])
 
+class Passage(BaseModel):
+    passage: str
+    rank:int
+
+class PassageList(BaseModel):
+    passage_list: list[Passage]
 
 class RerankingTemplate(BasePromptTemplate):
     prompt: str = """You are an AI language model assistant. Your task is to rerank passages related to a query
     based on their relevance. 
-    The most relevant passages should be put at the beginning. 
+    The most relevant passages should be identified with high accuracy. 
     You should only pick at max {keep_top_k} passages.
-    The provided and reranked documents are separated by '{separator}'.
-    
+    The provided and reranked passages should be formatted in json as per the provided json schema. Output only the raw json and do not include any markdown formattting'.
+    Example JSON Schema:
+    {json_schema_example}
+
     The following are passages related to this query: {question}.
     
     Passages: 
@@ -91,9 +100,9 @@ class RerankingTemplate(BasePromptTemplate):
         return PromptTemplate(
             template=self.prompt,
             input_variables=["question", "passages"],
-            partial_variables={"keep_top_k": keep_top_k, "separator": self.separator},
+            partial_variables={"keep_top_k": keep_top_k, "json_schema_example": self.json_schema_example,},
         )
 
     @property
-    def separator(self) -> str:
-        return "\n#next-document#\n"
+    def json_schema_example(self) -> str:
+        return PassageList.model_json_schema()
