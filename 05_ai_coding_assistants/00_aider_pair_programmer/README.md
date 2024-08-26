@@ -1,6 +1,6 @@
 # Aider
 
-Aider lets you pair program with LLMs, to edit code in your local git repository.
+Aider lets you pair program with LLMs, to edit code in your local git repository. It leverages the power of large language models to assist you in writing, refactoring, and understanding code. With Aider, you can streamline your development process, reduce errors, and improve code quality by getting real-time suggestions and corrections from an AI assistant.
 
 ## Installation
 
