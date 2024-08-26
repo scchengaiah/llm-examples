@@ -36,10 +36,10 @@ set AZURE_API_VERSION=<your-api-version>
 set AZURE_API_BASE=<your-api-base>
 ```
 
-Launch aider with the following command.
+Launch aider with the following command disabling auto commits.
 
 ```bash
-aider --model azure/<your_deployment_name>
+aider --model azure/<your_deployment_name> --no-auto-commits false --no-dirty-commits false
 ```
 
 To update model specific configuration such as controlling token usage, follow the below steps. The complete configuration reference can be found [here](https://aider.chat/docs/config/options.html).
@@ -51,7 +51,18 @@ Create a `.aider.model.metadata.json` file in one of these locations:
 - The current directory where you launch aider.
 - Or specify a specific file with the `--model-metadata-file <filename>` switch.
 
-For this example, we will add the file in the root of our git repo.
+For this example, we will add the file `.aider.model.metadata.json` in the root of our git repo with the following content:
+
+```json
+{
+  "azure/gpt-4o": {
+    "max_tokens": 100000,
+    "max_input_tokens": 128000,
+    "max_output_tokens": 4096,
+    "mode": "chat"
+  }
+}
+```
 
 ## Usage
 
