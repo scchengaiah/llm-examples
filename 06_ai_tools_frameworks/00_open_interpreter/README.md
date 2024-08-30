@@ -53,6 +53,10 @@ Refer [here](https://docs.openinterpreter.com/guides/profiles) to understand mor
 
 Refer [here](https://docs.openinterpreter.com/settings/all-settings) for complete settings.
 
+Profile involving `Azure OpenAI` subscription can be found [here](./profiles/azure-gpt-4o.yml) which shall be used by the Interpreter.
+
+Launch interpreter with the created profile `interpreter --profile <ABSOLUTE-PATH-OF-THE-FOLDER>/azure-gpt-4o.yml`.
+
 ## References
 
 [Open Interpreter Docs](https://docs.openinterpreter.com/getting-started/introduction)
