@@ -36,7 +36,23 @@ Let us explore by setting this up and evaluate its capabilities.
 
 ### Setup
 
-> WORK IN PROGRESS.
+#### Docker based
+
+[Reference](https://github.com/InternLM/MindSearch/tree/main/docker#mindsearch-docker-compose-user-guide)
+
+#### Manual based
+
+We try manual based setup in order to make some changes to the source code in case of any unique requirments.
+
+We follow this [documentation](https://github.com/InternLM/MindSearch/tree/main?tab=readme-ov-file#%EF%B8%8F-build-your-own-mindsearch) to perform the setup.
+
+We have cloned the repo to our local machine and applied few changes. Mindsearch heavily relies on [LMDeploy - toolkit for compressing, deploying, and serving LLMs.](https://github.com/InternLM/lmdeploy) that can serve LLMs and also supports OpenAI compatible interface related endpoints via [LAgent - A lightweight framework for building LLM-based agents](https://github.com/InternLM/lagent) framework.
+
+We have copied the [GPTAPI](https://github.com/InternLM/lagent/blob/main/lagent/llms/openai.py) implementation from `LAgent` and modified to support `Azure OpenAI` endpoint. This implementation can be found [here](./MindSearch/mindsearch/agent/azure_openai.py).
+
+Similarly, we can setup custom implementation for other providers such as `Amazon Bedrock` to leverage Anthropic `Claude` models.
+
+> THE IMPLEMENTATION [azure_openai.py](./MindSearch/mindsearch/agent/azure_openai.py) IS WORK IN PROGRESS.
 
 ## Document based Search Engines
 
