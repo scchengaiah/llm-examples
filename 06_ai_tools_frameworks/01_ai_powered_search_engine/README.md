@@ -26,6 +26,18 @@ In order to make this work, we had to perform certain changes from the networkin
 
 We followed this [recommendation](https://github.com/ItzCrazyKns/Perplexica/issues/180#issuecomment-2158487861) along with [NETWORKING.md](https://github.com/ItzCrazyKns/Perplexica/blob/master/docs/installation/NETWORKING.md) document from the repository.
 
+### Mindsearch
+
+[MindSearch](https://github.com/InternLM/MindSearch) is an open-source AI Search Engine Framework with Perplexity.ai Pro performance. You can simply deploy it with your own perplexity.ai style search engine with either close-source LLMs (GPT, Claude) or open-source LLMs (InternLM2.5 series are specifically optimized to provide superior performance within the MindSearch framework; other open-source models have not been specifically tested).
+
+This claims that the results retrieved are efficient compared to other platforms available in the market such as Perplexity.
+
+Let us explore by setting this up and evaluate its capabilities.
+
+### Setup
+
+> WORK IN PROGRESS.
+
 ## Document based Search Engines
 
 AI powered document based search engines that can respond to user queries in natural language over documentation.
