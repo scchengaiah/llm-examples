@@ -39,7 +39,7 @@ set AZURE_API_BASE=<your-api-base>
 Launch aider with the following command disabling auto commits.
 
 ```bash
-aider --model azure/<your_deployment_name> --no-auto-commits false --no-dirty-commits false
+aider --model azure/<your_deployment_name> --no-auto-commits --no-dirty-commits
 ```
 
 To update model specific configuration such as controlling token usage, follow the below steps. The complete configuration reference can be found [here](https://aider.chat/docs/config/options.html).

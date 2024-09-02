@@ -15,7 +15,7 @@ from lagent.llms.base_api import BaseAPIModel
 
 warnings.simplefilter('default')
 
-OPENAI_API_BASE = 'https://api.openai.com/v1/chat/completions'
+OPENAI_API_BASE = f"{os.getenv('AZURE_API_BASE')}/openai/deployments/{os.getenv('AZURE_DEPLOYMENT_ID')}/chat/completions?api-version={os.getenv('AZURE_API_VERSION')}"
 
 
 class AZUREGPTAPI(BaseAPIModel):
@@ -39,7 +39,7 @@ class AZUREGPTAPI(BaseAPIModel):
             template if needed, in case the requirement of injecting or
             wrapping of any meta instructions.
         openai_api_base (str): The base url of OpenAI's API. Defaults to
-            'https://api.openai.com/v1/chat/completions'.
+            'https://{your-resource-name}.openai.azure.com/openai/deployments/{deployment-id}/chat/completions?api-version=2024-06-01'.
         gen_params: Default generation configuration which could be overridden
             on the fly of generation.
     """
@@ -72,7 +72,7 @@ class AZUREGPTAPI(BaseAPIModel):
         self.logger = getLogger(__name__)
 
         if isinstance(key, str):
-            self.keys = [os.getenv('OPENAI_API_KEY') if key == 'ENV' else key]
+            self.keys = [os.getenv('AZURE_API_KEY') if key == 'ENV' else key]
         else:
             self.keys = key
 
@@ -90,7 +90,6 @@ class AZUREGPTAPI(BaseAPIModel):
         self.model_type = model_type
         self.proxies = proxies
         self.json_mode = json_mode
-        print("Entered into the CUSTOM ZONE")
 
     def chat(
         self,
@@ -203,7 +202,7 @@ class AZUREGPTAPI(BaseAPIModel):
                         break
 
                 key = self.keys[self.key_ctr]
-                header['Authorization'] = f'Bearer {key}'
+                header['api-key'] = key
 
             if self.orgs:
                 with Lock():
@@ -284,10 +283,12 @@ class AZUREGPTAPI(BaseAPIModel):
                             if choice['finish_reason'] == 'stop':
                                 return
                         else:
-                            choice = response['choices'][0]
-                            if choice['finish_reason'] == 'stop':
-                                return
-                            yield choice['delta'].get('content', '')
+                            print(response)
+                            if response['choices']:
+                                choice = response['choices'][0]
+                                if choice['finish_reason'] == 'stop':
+                                    return
+                                yield choice['delta'].get('content', '')
                     except Exception as exc:
                         print(
                             f'response {decoded} lead to exception of {str(exc)}'
@@ -317,7 +318,7 @@ class AZUREGPTAPI(BaseAPIModel):
                     break
 
             key = self.keys[self.key_ctr]
-            header['Authorization'] = f'Bearer {key}'
+            header['api-key'] = key
 
             if self.orgs:
                 self.org_ctr += 1
@@ -407,8 +408,7 @@ class AZUREGPTAPI(BaseAPIModel):
                 gen_params.pop('top_k')
             gen_params.pop('skip_special_tokens', None)
             gen_params.pop('session_id', None)
-            data = {
-                'model': model_type,
+            data = {                
                 'messages': messages,
                 'n': 1,
                 **gen_params

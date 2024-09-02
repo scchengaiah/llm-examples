@@ -13,6 +13,10 @@ from pydantic import BaseModel
 from sse_starlette.sse import EventSourceResponse
 
 from mindsearch.agent import init_agent
+from dotenv import load_dotenv
+
+env_loaded = load_dotenv()
+print(f"Loaded Env: {env_loaded}")
 
 
 def parse_arguments():

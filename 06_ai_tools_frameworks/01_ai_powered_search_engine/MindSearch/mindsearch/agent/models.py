@@ -44,6 +44,12 @@ gpt4 = dict(type=GPTAPI,
             max_new_tokens = 4096
             )
 
+azure_gpt4 = dict(type=AZUREGPTAPI,
+            model_type='gpt-4o',
+            key='ENV',
+            max_new_tokens = 4096
+            )
+
 
 url = 'https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation'
 qwen = dict(type=GPTAPI,
