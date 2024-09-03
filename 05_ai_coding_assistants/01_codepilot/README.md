@@ -27,7 +27,7 @@ We are currently in research phase trying to understand the nuances of searching
     https://qdrant.tech/documentation/tutorials/code-search/ - To generate Code base indexes for embeddings:
 
     - https://github.com/sourcegraph/scip - Generate LSIF Index for various languages
-    - https://github.com/sourcegraph/scip-python?tab=readme-ov-file - Generate LSIF Index for python project
+    - https://github.com/sourcegraph/scip-python?tab=readme-ov-file - Generate LSIF Index for python project to proceed with embeddings (text+code) as recommended in the article.
     - https://github.com/qdrant/demo-code-search
 
     **Repos for Semantic Code Search:**
