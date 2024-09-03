@@ -13,7 +13,7 @@
                 "--lang",
                 "en",
                 "--model_format",
-                "azure_gpt4",
+                "gpt4",
                 "--search_engine",
                 "DuckDuckGoSearch"
             ]

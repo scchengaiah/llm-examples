@@ -4,6 +4,7 @@ from lagent.llms import (GPTAPI, INTERNLM2_META, HFTransformerCasualLM,
                          LMDeployClient, LMDeployServer)
 
 from mindsearch.agent.azure_openai import AZUREGPTAPI
+from mindsearch.agent.openai_custom import GPTAPICUSTOM
 
 internlm_server = dict(type=LMDeployServer,
                        path='internlm/internlm2_5-7b-chat',
@@ -37,7 +38,7 @@ internlm_hf = dict(type=HFTransformerCasualLM,
                    repetition_penalty=1.02,
                    stop_words=['<|im_end|>'])
 # openai_api_base needs to fill in the complete chat api address, such as: https://api.openai.com/v1/chat/completions
-gpt4 = dict(type=GPTAPI,
+gpt4 = dict(type=GPTAPICUSTOM,
             model_type='gpt-4o',
             key=os.environ.get('OPENAI_API_KEY', 'YOUR OPENAI API KEY'),
             openai_api_base=os.environ.get('OPENAI_API_BASE', 'https://api.openai.com/v1/chat/completions'),
