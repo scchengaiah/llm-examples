@@ -52,7 +52,7 @@ We have copied the [GPTAPI](https://github.com/InternLM/lagent/blob/main/lagent/
 
 Similarly, we can setup custom implementation for other providers such as `Amazon Bedrock` to leverage Anthropic `Claude` models.
 
-> THE IMPLEMENTATION [azure_openai.py](./MindSearch/mindsearch/agent/azure_openai.py) IS WORK IN PROGRESS.
+[azure_openai.py](./MindSearch/mindsearch/agent/azure_openai.py) is a custom version created extending `BaseAPIModel` from `lagent` library.
 
 ## Document based Search Engines
 
