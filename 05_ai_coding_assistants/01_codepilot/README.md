@@ -26,12 +26,11 @@ We are currently in research phase trying to understand the nuances of searching
     https://www.greptile.com/blog/semantic - Excellent blog explaining how semantic search works over a codebase.
     https://qdrant.tech/documentation/tutorials/code-search/ - To generate Code base indexes for embeddings:
 
-    - https://github.com/sourcegraph/scip
-    - https://github.com/sourcegraph/scip-python?tab=readme-ov-file
+    - https://github.com/sourcegraph/scip - Generate LSIF Index for various languages
+    - https://github.com/sourcegraph/scip-python?tab=readme-ov-file - Generate LSIF Index for python project
+    - https://github.com/qdrant/demo-code-search
 
     **Repos for Semantic Code Search:**
-
-    https://github.com/qdrant/demo-code-search
 
     https://github.com/sturdy-dev/semantic-code-search
 
