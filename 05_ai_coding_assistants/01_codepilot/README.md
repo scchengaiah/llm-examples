@@ -32,12 +32,15 @@ We are currently in research phase trying to understand the nuances of searching
 
     **Repos for Semantic Code Search:**
 
-    https://github.com/sturdy-dev/semantic-code-search
+    https://github.com/sturdy-dev/semantic-code-search - Implemented long back using Transformer based models. Advantage is that it can point to any existing repo with ease and can start answering questions. It uses tree sitter parsing Generators and particularly the one created with python bindings to navigate the source code and generate embeddings.
+    [Tree Sitter](https://tree-sitter.github.io/tree-sitter/), [Tree Sitter with Python bindings](https://github.com/grantjenks/py-tree-sitter-languages)
 
-    https://github.com/fynnfluegge/codeqai
+    https://github.com/fynnfluegge/codeqai - Leverages Tree Sitter for parsing, Langchain and AI powered code Search.
 
-    https://github.com/kantord/SeaGOAT
+    https://github.com/kantord/SeaGOAT - Has Server Client architecture, Uses ChromaDB under the hood for embeddings generation and querying purpose. Needs more time to setup installation. It does iterate through files and chunks based on lines from initial impressions.
 
     **Others:**
 
     https://github.com/getzep/zep - Zep: Long-Term Memory for ‍AI Assistants.
+
+    https://github.com/fynnfluegge/doc-comments-ai - Generate documentation for your code using AI. A well documented code can be beneficial to improve the quality of the semantic retrieval.
