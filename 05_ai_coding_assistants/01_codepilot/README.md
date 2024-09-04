@@ -24,6 +24,7 @@ We are currently in research phase trying to understand the nuances of searching
     **Blogs:**
 
     https://www.greptile.com/blog/semantic - Excellent blog explaining how semantic search works over a codebase.
+
     https://qdrant.tech/documentation/tutorials/code-search/ - To generate Code base indexes for embeddings:
 
     - https://github.com/sourcegraph/scip - Generate LSIF Index for various languages
@@ -44,3 +45,14 @@ We are currently in research phase trying to understand the nuances of searching
     https://github.com/getzep/zep - Zep: Long-Term Memory for ‍AI Assistants.
 
     https://github.com/fynnfluegge/doc-comments-ai - Generate documentation for your code using AI. A well documented code can be beneficial to improve the quality of the semantic retrieval.
+
+## Current activities
+
+Based on the above research on [Semantic search over a Codebase](#development-progress), we need to perform the following:
+
+- Explore codeqai and setup locally with chat bot integration.
+  - Local setup complete with debugging. In windows check Appdata (Roaming and Local folders) where they are maintaining config and embedding cache.
+  - Treesitter was used to generate embeddings into FAISS Database.
+  - Works fine for simple usecases, felt the way in which the code was parsed and embedded is not to the level of qdrant example.
+  - As part of next step, we can try to generate similar jsonl format as qdrant did for better embeddings of source code.
+- Setup qdrant based vector store for semantic code search. - Require parsing library to parse python files and convert into a storable representation before implementation.
