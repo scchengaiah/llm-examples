@@ -1,0 +1,67 @@
+You are an expert in parsing Python source code files and extract the content in structured format by considering some examples.
+
+I want an python based implementation to parse my python source code files and generate a metadata json of these source code files for further analysis. I need your help to parse the python source files by choosing efficient libraries and the output of the parsing should be in jsonl format with each json object containing the details as provided in the examples below. Keep in mind that the below examples are taken when performing a similar activity over a rust programming language project containing rust source code files. Due to this, You are allowed to enhance the fields to make it compatible for python programming language, Feel free to include additional fields or remove unwanted fields to make the json complete. Do note that this json shall be fed into the vector database by generating embeddings to perform semantic search over the code, so do consider this and make sure that the json response is of high quality.
+
+In the provided implementation, please ensure the following aspects.
+ 1. Ensure that you consider skip processing those files and directories mentioned in the .gitignore file leveraging Pathspec library.
+ 2. Provide user an option to upload his own .gitignore type of file in addition to the one in project root directory.
+ 3. Add appropriate print statements in the implementation to track the execution progress.
+ 4. Provide documentation in the form of comments within the source code for better understanding.
+
+## Sample json object generated from part of the Rust source code file. Below are some of the examples for your reference:
+<EXAMPLE 1>
+```json
+{
+   "name":"InvertedIndexRam",
+   "signature":"# [doc = \" Inverted flatten index from dimension id to posting list\"] # [derive (Debug , Clone , PartialEq)] pub struct InvertedIndexRam { # [doc = \" Posting lists for each dimension flattened (dimension id -> posting list)\"] # [doc = \" Gaps are filled with empty posting lists\"] pub postings : Vec < PostingList > , # [doc = \" Number of unique indexed vectors\"] # [doc = \" pre-computed on build and upsert to avoid having to traverse the posting lists.\"] pub vector_count : usize , }",
+   "code_type":"Struct",
+   "docstring":"= \" Inverted flatten index from dimension id to posting list\"",
+   "line":15,
+   "line_from":13,
+   "line_to":22,
+   "context":{
+      "module":"inverted_index",
+      "file_path":"lib/sparse/src/index/inverted_index/inverted_index_ram.rs",
+      "file_name":"inverted_index_ram.rs",
+      "struct_name":null,
+      "snippet":"/// Inverted flatten index from dimension id to posting list\n#[derive(Debug, Clone, PartialEq)]\npub struct InvertedIndexRam {\n    /// Posting lists for each dimension flattened (dimension id -> posting list)\n    /// Gaps are filled with empty posting lists\n    pub postings: Vec<PostingList>,\n    /// Number of unique indexed vectors\n    /// pre-computed on build and upsert to avoid having to traverse the posting lists.\n    pub vector_count: usize,\n}\n"
+   }
+}
+```
+</EXAMPLE 1>
+<EXAMPLE 2>
+{
+   "name":"EnumId",
+   "signature":"# [derive (Debug , Deserialize , Serialize , Copy , Clone , PartialEq , Eq , Hash , Ord , PartialOrd)] # [serde (untagged)] enum EnumId { Num (u64) , Uuid (Uuid) , }",
+   "code_type":"Enum",
+   "docstring":null,
+   "line":19,
+   "line_from":17,
+   "line_to":22,
+   "context":{
+      "module":"benches",
+      "file_path":"lib/segment/benches/id_type_benchmark.rs",
+      "file_name":"id_type_benchmark.rs",
+      "struct_name":null,
+      "snippet":"#[derive(Debug, Deserialize, Serialize, Copy, Clone, PartialEq, Eq, Hash, Ord, PartialOrd)]\n#[serde(untagged)]\nenum EnumId {\n    Num(u64),\n    Uuid(Uuid),\n}\n"
+   }
+}
+</EXAMPLE 2>
+<EXAMPLE 3>
+{
+   "name":"NamedQuery",
+   "signature":"# [derive (Debug , Clone)] pub struct NamedQuery < TQuery > { pub query : TQuery , pub using : Option < String > , }",
+   "code_type":"Struct",
+   "docstring":null,
+   "line":429,
+   "line_from":428,
+   "line_to":432,
+   "context":{
+      "module":"data_types",
+      "file_path":"lib/segment/src/data_types/vectors.rs",
+      "file_name":"vectors.rs",
+      "struct_name":null,
+      "snippet":"#[derive(Debug, Clone)]\npub struct NamedQuery<TQuery> {\n    pub query: TQuery,\n    pub using: Option<String>,\n}\n"
+   }
+}
+</EXAMPLE 3>
