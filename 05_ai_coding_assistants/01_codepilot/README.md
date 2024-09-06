@@ -56,3 +56,7 @@ Based on the above research on [Semantic search over a Codebase](#development-pr
   - Works fine for simple usecases, felt the way in which the code was parsed and embedded is not to the level of qdrant example.
   - As part of next step, we can try to generate similar jsonl format as qdrant did for better embeddings of source code.
 - Setup qdrant based vector store for semantic code search. - Require parsing library to parse python files and convert into a storable representation before implementation.
+  - Able to create an example to parse python source code equivalent to that of rust impln mentioned in the notebook.
+  - The impln can be found [here](./codepilot/python_parser.py). This can accomodate the example mentioned in the [notebook](https://colab.research.google.com/github/qdrant/examples/blob/master/code-search/code-search.ipynb), [Local Impln](./codepilot/code_search.ipynb)
+  - As part of next step, We have analyzed [demo-code-search](https://github.com/qdrant/demo-code-search) repo that contains end to end advanced impln for the code search for the Rust repository, we have decomposed the end to end activities performed to setup a similar example for python based repositories. The analyzed impln can be found [here](./references/demo-code-search-rust/).
+  - Our plan is to create a similar implementation for python based repository and setup a searchable user interface with api backend to proceed with agentic integration.
