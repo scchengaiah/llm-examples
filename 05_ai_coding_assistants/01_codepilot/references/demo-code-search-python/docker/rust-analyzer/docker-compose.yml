@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+  rust-lsif:
+    image: rust-lsif:latest # Image tag
+    container_name: rust-lsif-container # Container name
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - /mnt/d/tmp/genai/qdrant-master:/workspace/qdrant # Github repo of qdrant database (https://github.com/qdrant/qdrant)
+      - /mnt/d/tmp/genai/qdrant-master/data:/workspace/data
+    environment:
+      - QDRANT_PATH=/workspace/qdrant
+      - ROOT_PATH=/workspace
