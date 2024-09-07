@@ -1,0 +1,5 @@
+agency-swarm==0.2.5
+requests
+unstructured[html]
+playwright
+pyreadline3
