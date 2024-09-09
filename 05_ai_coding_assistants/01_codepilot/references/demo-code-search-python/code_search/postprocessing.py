@@ -39,7 +39,7 @@ def merge_search_results(code_search_result: List[dict], nlu_search_result: List
 
     code_search_result_by_file = defaultdict(list)
     for hit in code_search_result:
-        code_search_result_by_file[hit["file"]].append(hit)
+        code_search_result_by_file[hit["context"]["file_path"]].append(hit)
 
     for nlu_search_hit in nlu_search_result:
         file = nlu_search_hit["context"]["file_path"]
@@ -78,10 +78,10 @@ def try_merge_overlapping_snippets(code_search_results: List[dict], nlu_search_r
     Returns: Overlapping code search results merged with NLU search results
     """
     overlapped = []
-    code_search_result = sorted(code_search_results, key=lambda x: x["start_line"])
+    code_search_result = sorted(code_search_results, key=lambda x: x["line_from"])
     for code_search_hit in code_search_result:
-        from_a = code_search_hit["start_line"] + 1
-        to_a = code_search_hit["end_line"] + 1
+        from_a = code_search_hit["line_from"] + 1
+        to_a = code_search_hit["line_to"] + 1
         from_b = nlu_search_result["line_from"]
         to_b = nlu_search_result["line_to"]
 

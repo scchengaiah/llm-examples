@@ -22,8 +22,7 @@ class CodeSearcher:
         result = self.client.search(
             collection_name=self.collection_name,
             query_vector=vector,
-            limit=limit,
-            with_payload=["start_line", "end_line", "file"]
+            limit=limit
         )
 
         return [hit.payload for hit in result]
@@ -63,10 +62,11 @@ class CombinedSearcher:
 
 
 if __name__ == '__main__':
-    query = "cardinality of should request"
+    query = "how to stream response ?"
 
     searcher = CombinedSearcher()
 
     res = searcher.search(query)
-    for hit in res:
+    for index, hit in enumerate(res):
+        print(f"****** RESULT - {index} ******")
         print(json.dumps(hit))

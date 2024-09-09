@@ -9,14 +9,6 @@ import json
 from code_search.config import QDRANT_URL, QDRANT_API_KEY, DATA_DIR, QDRANT_CODE_COLLECTION_NAME
 from code_search.model.encoder import UniXcoderEmbeddingsProvider
 
-code_keys = [
-    "code_snippet",
-    "body",
-    "signature",
-    "name",
-]
-
-
 def encode_and_upload():
     client = qdrant_client.QdrantClient(
         QDRANT_URL,
@@ -25,7 +17,7 @@ def encode_and_upload():
     )
 
     collection_name = QDRANT_CODE_COLLECTION_NAME
-    input_file = Path(DATA_DIR) / "qdrant_snippets.jsonl"
+    input_file = Path(DATA_DIR) / "py_files_structured.jsonl"
     encoder = UniXcoderEmbeddingsProvider()
 
     input_file = Path(DATA_DIR) / input_file
@@ -44,18 +36,10 @@ def encode_and_upload():
         with open(input_file, "r") as fp:
             for line in tqdm(fp):
                 line_dict = json.loads(line)
+                docstring = line_dict.get("docstring") or ""
+                code_snippet = line_dict["context"]["snippet"]
 
-                body = None
-                for code_key in code_keys:
-                    body = line_dict.get(code_key)
-                    if body is not None:
-                        break
-                docstring = line_dict.get("docstring")
-
-                if body is None or len(body) == 0:
-                    continue
-
-                embedding = encoder.embed_code(body, docstring)
+                embedding = encoder.embed_code(code_snippet, docstring)
                 embeddings.append(embedding)
 
         np.save(str(output_file), np.array(embeddings))

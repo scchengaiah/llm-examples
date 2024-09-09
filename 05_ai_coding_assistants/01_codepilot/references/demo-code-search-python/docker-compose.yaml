@@ -4,8 +4,7 @@ services:
   code_search_demo:
     build: .
     container_name: code_search_demo
-    environment:
-      - QDRANT_URL
-      - QDRANT_API_KEY
+    env_file:
+      - ../../.env
     ports:
       - 8000:8000

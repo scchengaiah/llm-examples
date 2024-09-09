@@ -113,8 +113,6 @@ def textify(structure):
     context = ""
     if structure["context"] is not None:
         context_struct = structure["context"]
-        if context_struct["struct_name"] is not None:
-            context = f"""{context} in struct {context_struct["struct_name"]} """
         if context_struct["module"] is not None:
             context = f"""{context} in module {context_struct["module"]} """
         if context_struct["file_name"] is not None:

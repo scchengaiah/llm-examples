@@ -10,7 +10,7 @@ from code_search.config import DATA_DIR, QDRANT_URL, QDRANT_API_KEY, QDRANT_NLU_
     ENCODER_SIZE
 from code_search.index.textifier import textify
 
-file_name = Path(DATA_DIR) / "structures.jsonl"
+file_name = Path(DATA_DIR) / "py_files_structured.jsonl"
 
 
 def iter_batch(iterable, batch_size=64):

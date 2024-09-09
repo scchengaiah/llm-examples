@@ -5,9 +5,9 @@ set -e
 # Ensure current path is project root
 cd "$(dirname "$0")/../"
 
-git clone https://github.com/qdrant/qdrant.git /tmp/qdrant
+git clone https://github.com/qdrant/qdrant.git /tmp/repo
 
-QDRANT_PATH=/tmp/qdrant bash -x tools/index_qdrant.sh /tmp/qdrant
+REPO_PATH=/tmp/repo bash -x tools/index_repo.sh /tmp/repo
 
-rm -rf /tmp/qdrant
+rm -rf /tmp/repo
 

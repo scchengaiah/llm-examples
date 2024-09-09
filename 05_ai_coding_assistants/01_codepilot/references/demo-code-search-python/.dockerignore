@@ -1,3 +1,4 @@
 data/
 frontend/node_modules/
 venv/
+.venv/

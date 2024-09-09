@@ -1,0 +1,23 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug files_to_structured_jsonl.py",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "code_search.index.files_to_structured_jsonl",
+            "env": {
+                "REPO_PATH": "D:/tmp/genai/agency-swarm"
+            }
+        },
+        {
+            "name": "Debug upload_signatures.py",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "code_search.index.upload_signatures",
+        }
+    ]
+}
