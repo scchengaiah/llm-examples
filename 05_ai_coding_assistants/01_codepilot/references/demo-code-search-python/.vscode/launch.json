@@ -17,7 +17,7 @@
             "name": "Debug upload_signatures.py",
             "type": "debugpy",
             "request": "launch",
-            "module": "code_search.index.upload_signatures",
+            "module": "code_search.index.upload_code",
         }
     ]
 }

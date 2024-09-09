@@ -3,8 +3,9 @@ from qdrant_client import QdrantClient
 import json
 
 from code_search.config import QDRANT_URL, QDRANT_API_KEY, DATA_DIR, QDRANT_FILE_COLLECTION_NAME
+from code_search.index.utils import measure_execution_time
 
-
+@measure_execution_time
 def encode_and_upload():
     qdrant_client = QdrantClient(
         QDRANT_URL,
@@ -35,9 +36,9 @@ def encode_and_upload():
         payload=payload,
         vectors=[{}] * len(payload),
         ids=None,
-        batch_size=10
+        batch_size=20
     )
-
 
 if __name__ == '__main__':
     encode_and_upload()
+    
