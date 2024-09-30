@@ -1,3 +1,6 @@
 pathspec
 python-lsp-server
 lsif-py
+agency-swarm==0.2.5
+pyreadline3
+streamlit

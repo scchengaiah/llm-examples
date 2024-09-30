@@ -60,3 +60,18 @@ Based on the above research on [Semantic search over a Codebase](#development-pr
   - The impln can be found [here](./codepilot/python_parser.py). This can accomodate the example mentioned in the [notebook](https://colab.research.google.com/github/qdrant/examples/blob/master/code-search/code-search.ipynb), [Local Impln](./codepilot/code_search.ipynb)
   - As part of next step, We have analyzed [demo-code-search](https://github.com/qdrant/demo-code-search) repo that contains end to end advanced impln for the code search for the Rust repository, we have decomposed the end to end activities performed to setup a similar example for python based repositories. The analyzed impln can be found [here](./references/demo-code-search-rust/).
   - Our plan is to create a similar implementation for python based repository and setup a searchable user interface with api backend to proceed with agentic integration.
+  - We are leveraging Inception event as an opportunity to setup a prototype to demonstrate the capabilities of copilot.
+    - [x] Python code search example.
+    - [ ] Agentic example to synthesize response.
+
+## Larger scope of the project
+
+Use this [codium](https://www.codium.ai/blog/rag-for-large-scale-code-repos/) reference blog to improve the chunking and vector store embeddings
+
+- [ ] Enhance chunking by creating snippets of contextual meaning. Refer to the Codium blog.
+- [ ] Create Natural language descriptions using LLM for the code snippets for accurate retrieval.
+- [ ] Leverage Agentic workflow to represent user query in diverse forms to enhance the retrieval.
+- [ ] Leverage Repo map as backup or as an augmented information for the agent to come up with better responses.
+- [ ] Update Agentic workflow to include Senior Solution Architect, Senior Implementation Engineer, Senior Test Engineer, Senior Quality Analyst to setup e2e implementation for a given requirement, bug or enhancement on existing codebase.
+  - [ ] Research and comeup with appropriate tools required/involved in achieving this functionality.
+  - [ ] Inter communication between agents to increase the quality of the response.
