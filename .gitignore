@@ -21,3 +21,5 @@ __pycache__
 temp
 settings.json
 .aider*
+*.sqllite
+*.sqlite
