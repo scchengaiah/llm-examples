@@ -7,7 +7,7 @@ import hashlib
 from rich import print as rprint
 from textwrap import dedent
 
-BASE_URL = "http://172.21.153.45:8000/api/search"
+BASE_URL = "http://172.22.123.84:8000/api/search"
 
 def generate_md5_result_hash(result: dict) -> str:
     # Generate MD5 hash of the result

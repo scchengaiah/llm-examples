@@ -8,3 +8,11 @@ services:
       - ../../.env
     ports:
       - 8000:8000
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 1G
+        reservations:
+          cpus: "0.25"
+          memory: 512M

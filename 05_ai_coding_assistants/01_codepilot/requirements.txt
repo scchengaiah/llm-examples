@@ -1,6 +1,9 @@
 pathspec
 python-lsp-server
 lsif-py
+# Without Structured outputs
 agency-swarm==0.2.5
+# With Structured outputs
+# agency-swarm==0.3.0
 pyreadline3
 streamlit
