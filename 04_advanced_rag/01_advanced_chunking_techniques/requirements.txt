@@ -1,0 +1,8 @@
+langchain-text-splitters==0.3.0
+langchain==0.3.2
+langchain-openai==0.2.2
+langchain-community==0.3.1
+pypdf==5.0.1
+# Download models after installing spacy library.
+spacy==3.7.2
+numpy>=1.26.0,<2.0.0
