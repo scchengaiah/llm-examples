@@ -4,9 +4,15 @@ fastapi
 git+https://github.com/InternLM/lagent.git
 gradio
 janus
-lmdeploy
+# Using direct git to use latest changes and to overcome rust non availability error when installing outlines package.
+git+https://github.com/InternLM/lmdeploy.git@main
 pyvis
 sse-starlette
 termcolor
 transformers==4.41.0
 uvicorn
+
+# To fix the issue - https://github.com/InternLM/MindSearch/issues/202
+class_registry
+# To use .env file
+python-dotenv

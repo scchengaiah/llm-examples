@@ -54,6 +54,10 @@ Similarly, we can setup custom implementation for other providers such as `Amazo
 
 [azure_openai.py](./MindSearch/mindsearch/agent/azure_openai.py) is a custom version created extending `BaseAPIModel` from `lagent` library.
 
+After installing the requirements via `pip install -r requirements.txt` Check [run.sh](./MindSearch/run.sh) that contains command to start Mindsearch.
+
+For frontend, we have `streamlit`, `gradio`, and `react` as options. To run with streamlit launch another command prompt and execute `streamlit run frontend/mindsearch_streamlit.py`. For other frontend interfaces, refer to the documentation.
+
 ## Document based Search Engines
 
 AI powered document based search engines that can respond to user queries in natural language over documentation.
