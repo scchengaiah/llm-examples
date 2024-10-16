@@ -3,6 +3,15 @@ langchain==0.3.2
 langchain-openai==0.2.2
 langchain-community==0.3.1
 pypdf==5.0.1
+
+# For sentence splitting
 # Download models after installing spacy library.
+# python -m spacy download en_core_web_sm
 spacy==3.7.2
+# To accomodata langchain and spacy together, had to setup the below dependency.
 numpy>=1.26.0,<2.0.0
+
+# For semantic-Splitting
+# sentence-transformers>=2.2.2,<3.0.0
+git+https://github.com/agamm/semantic-split.git@main
+langchain_experimental==0.3.0
