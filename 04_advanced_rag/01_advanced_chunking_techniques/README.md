@@ -11,3 +11,7 @@
 [A guide to understand Semantic Splitting for document chunking in LLM applications](https://www.reddit.com/r/LangChain/comments/1erxo60/a_guide_to_understand_semantic_splitting_for/)
 
 [Semantic Splitting From Scratch](https://www.youtube.com/watch?v=qvDbOYz6U24) - [Related Github Repo](https://github.com/bitswired/semantic-splitting-tutorial)
+
+### Contextual Embeddings
+
+[New technique makes RAG systems much better at retrieving the right documents](https://venturebeat.com/ai/new-technique-makes-rag-systems-much-better-at-retrieving-the-right-documents/) - [Hugging Face Link for the Contextual embedding model](https://huggingface.co/jxm/cde-small-v1)
