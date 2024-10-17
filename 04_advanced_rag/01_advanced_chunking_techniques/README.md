@@ -6,6 +6,7 @@
 
 [Langchain - Cookbook](https://github.com/langchain-ai/langchain/tree/master/cookbook)
 
+[Levels of Text Splitting](https://github.com/FullStackRetrieval-com/RetrievalTutorials/tree/main/tutorials/LevelsOfTextSplitting) - [Local copy of notebook](./01_5_Levels_Of_Text_Splitting.ipynb)
 ### Semantic Splitting
 
 [Example Source](./02_semantic_splitting/)
