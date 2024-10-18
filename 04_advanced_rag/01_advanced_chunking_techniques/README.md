@@ -6,7 +6,8 @@
 
 [Langchain - Cookbook](https://github.com/langchain-ai/langchain/tree/master/cookbook)
 
-[Levels of Text Splitting](https://github.com/FullStackRetrieval-com/RetrievalTutorials/tree/main/tutorials/LevelsOfTextSplitting) - [Local copy of notebook](./01_5_Levels_Of_Text_Splitting.ipynb)
+[Levels of Text Splitting](https://github.com/FullStackRetrieval-com/RetrievalTutorials/tree/main/tutorials/LevelsOfTextSplitting) - [Local copy of notebook](./01_5_Levels_Of_Text_Splitting.ipynb) - [Related Youtube Video](https://www.youtube.com/watch?v=8OJC21T2SL4)
+
 ### Semantic Splitting
 
 [Example Source](./02_semantic_splitting/)
@@ -27,6 +28,20 @@ Complete Langchain template implementation can be found here. This implementatio
 
 How does this work ?
 
-When a user asks a query, the `MultiVectorRetriever` hits the vectorstore to fetch relevant documents and for each of these documents, the parent document (Larger context) is fetched and sent to the LLM as context along with the user query.
+When a user asks a query, the `MultiVectorRetriever` hits the vectorstore to fetch relevant documents and for each of these sub documents, the parent document (Larger context) is fetched and sent to the LLM as context along with the user query.
 
 [Proposition based retriever Langchain Template](https://github.com/langchain-ai/langchain/tree/master/templates/propositional-retrieval)
+
+### Agentic Chunking
+
+[Example Source](./04_agentic_chunking/)
+
+Agentic chunking is slow and costly (uses LLM to prepare/augment chunks) but it is one of the efficient methods of chunking.
+
+**Pre-Requisite:** 
+
+Before, we go ahead with the Agentic chunking, it is required to create [Propositions](#proposition-based-retrieval) of the text and use these propositions with the `Agentic Chunker` to create chunks.
+
+How does it work ?
+
+We create chunks out of propositions by passing each proposition to the LLM along with the existing chunks created and their summaries and titles. The LLM shall decide if the current proposition should belong to any of the existing chunks and respond with the chunk id. We then add the proposition to the relevant chunk group. This continues until we navigate through all the propositions.
