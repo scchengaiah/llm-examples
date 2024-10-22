@@ -1,0 +1,10 @@
+name: null # Leave this null when using prefix
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12
+  - numpy
+  - pip
+  - pip:
+      - aider-chat

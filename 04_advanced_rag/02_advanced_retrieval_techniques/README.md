@@ -15,3 +15,5 @@ The below references are identified when exploring the advanced RAG algorithms f
 [AutoRAG](https://github.com/Marker-Inc-Korea/AutoRAG)
 
 [Retrieve & Re-Rank](https://www.sbert.net/examples/applications/retrieve_rerank/README.html)
+
+[Golden Retriever - Domain specific RAG approach](https://ai.plainenglish.io/a-deep-dive-into-golden-retriever-eea3396af3b4)
