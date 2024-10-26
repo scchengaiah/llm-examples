@@ -7,7 +7,8 @@
     - [Delete existing Conda environment](#delete-existing-conda-environment)
     - [Aider Specific - Model metadata file](#aider-specific---model-metadata-file)
     - [Aider Specific - Model settings file](#aider-specific---model-settings-file)
-    - [Launch Aider](#launch-aider)
+    - [Launch Aider - Command Line mode](#launch-aider---command-line-mode)
+    - [Launch Aider - Browser mode](#launch-aider---browser-mode)
   - [Setup - Standalone Virtual environment](#setup---standalone-virtual-environment)
     - [Installation](#installation)
     - [Configuration](#configuration)
@@ -144,22 +145,34 @@ Example content to place within the file:
   weak_model_name: gpt-4o-mini
 ```
 
-### Launch Aider
+### Launch Aider - Command Line mode
 
-In this example, we are going to use `aider` with `Azure OpenAI` subscription. For complete list of LLM support, refer to this [link](https://aider.chat/docs/llms.html).
+We use configuration file to launch `aider`. A sample config file can be found [here](./aider-config.yml). We copy this config file to our `%USERPROFILE%/aider-config.yml` or to the specific git repo where aider is used to refer within the command line. Edit this file based on your requirements.
 
-Set the following environment variables.
+For complete list of CLI options, refer [here](https://aider.chat/docs/config/options.html)
 
-```cmd
-set AZURE_API_KEY=<your-api-key>
-set AZURE_API_VERSION=<your-api-version>
-set AZURE_API_BASE=<your-api-base>
-```
-
-Launch aider with the following command disabling auto commits.
+For complete list of YAML config options, refer [here](https://aider.chat/docs/config/aider_conf.html)
 
 ```bash
-aider --model azure/<your_deployment_name> --no-auto-commits --no-dirty-commits
+# We use Azure OpenAI with aider hence, before launching aider set the following environment variables. Check the documentation for other LLM providers.
+# https://aider.chat/docs/llms.html
+SET AZURE_API_KEY=<AZURE_API_KEY>
+SET AZURE_API_BASE=<AZURE_API_BASE>
+SET AZURE_API_VERSION=<AZURE_API_VERSION>
+
+aider --chat-mode chat --config aider-config.yml 
+```
+
+### Launch Aider - Browser mode
+
+```bash
+# We use Azure OpenAI with aider hence, before launching aider set the following environment variables. Check the documentation for other LLM providers.
+# https://aider.chat/docs/llms.html
+SET AZURE_API_KEY=<AZURE_API_KEY>
+SET AZURE_API_BASE=<AZURE_API_BASE>
+SET AZURE_API_VERSION=<AZURE_API_VERSION>
+
+aider --chat-mode chat --config aider-config.yml --browser
 ```
 
 

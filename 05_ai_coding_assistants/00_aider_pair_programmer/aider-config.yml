@@ -1,0 +1,18 @@
+# Model settings
+model: azure/gpt-4o
+
+# https://aider.chat/docs/usage/modes.html
+# https://aider.chat/docs/usage/commands.html
+chat-mode: code
+
+# https://aider.chat/docs/more/edit-formats.html
+edit-format: diff
+
+# https://aider.chat/docs/usage/modes.html#architect-mode-and-the-editor-model
+architect: false
+# https://aider.chat/docs/more/edit-formats.html#editor-diff-and-editor-whole
+editor-edit-format: editor-diff
+
+# Git settings
+auto-commits: false
+dirty-commits: false
