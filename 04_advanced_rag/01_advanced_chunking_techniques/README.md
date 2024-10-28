@@ -4,8 +4,6 @@
 
 [Langchain - How to load PDF ?](https://python.langchain.com/docs/how_to/document_loader_pdf/)
 
-[Langchain - Cookbook](https://github.com/langchain-ai/langchain/tree/master/cookbook)
-
 [Levels of Text Splitting](https://github.com/FullStackRetrieval-com/RetrievalTutorials/tree/main/tutorials/LevelsOfTextSplitting) - [Local copy of notebook](./01_5_Levels_Of_Text_Splitting.ipynb) - [Related Youtube Video](https://www.youtube.com/watch?v=8OJC21T2SL4)
 
 ### Semantic Splitting
