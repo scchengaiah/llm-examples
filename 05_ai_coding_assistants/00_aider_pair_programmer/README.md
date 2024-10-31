@@ -160,7 +160,7 @@ SET AZURE_API_KEY=<AZURE_API_KEY>
 SET AZURE_API_BASE=<AZURE_API_BASE>
 SET AZURE_API_VERSION=<AZURE_API_VERSION>
 
-aider --chat-mode chat --config aider-config.yml 
+aider --chat-mode code --config aider-config.yml 
 ```
 
 ### Launch Aider - Browser mode
@@ -172,7 +172,7 @@ SET AZURE_API_KEY=<AZURE_API_KEY>
 SET AZURE_API_BASE=<AZURE_API_BASE>
 SET AZURE_API_VERSION=<AZURE_API_VERSION>
 
-aider --chat-mode chat --config aider-config.yml --browser
+aider --chat-mode code --config aider-config.yml --browser
 ```
 
 
