@@ -7,14 +7,14 @@
 
 ### Retrieval:
 # 1. Query the vector store and retrieve the top K chunks. 
-# 2. Rerank the retrieved chunks based on their relevance to the question.
-# 3. Extract images for the reranked chunks.
+# 2. Rerank the retrieved chunks based on their relevance to the question. Take top K reranked chunks.
 
 ### Response Generation
 ### Option 1:
 # 1. Send the retrieved context to the LLM with appropriate prompt to answer the question.
 ### Option 2 (Advanced):
-# 1. Send the retrieved context along with the image to the LLM with appropriate prompt to answer the question.
+# 1. Extract images for the reranked chunks.
+# 2. Send the retrieved context along with the image to the LLM with appropriate prompt to answer the question.
 
 from dotenv import load_dotenv
 from typing import Optional, List
@@ -36,20 +36,6 @@ temp_dir = "./temp"
 
 
 ############################################## Data Ingestion - START ####################################################
-
-class PropositionalChunk(BaseModel):
-    """Propositional Chunk created from the image."""
-    image_path: str = Field(description="Path to the image.")
-    chunk_number: str = Field(description="Sequence number given to the chunk.")
-    propositional_chunk: str = Field(description="Propositional chunk from the image.")
-
-class PropositionalChunks(BaseModel):
-    """Propositional Chunk created from the image."""
-    image_path: str = Field(description="Path to the image for which the propositional chunks were created.")
-    """Consolidated Propositional Chunks created from the image."""
-    propositional_chunks: List[PropositionalChunk] = Field(description="List of Propositional chunks from the image.")
-
-
 
 ########################################################################################################################
 
@@ -78,6 +64,18 @@ def convert_pdf_to_images():
 ########################################################################################################################
 
 #### 2. Summarize each image using LLM.
+
+class PropositionalChunk(BaseModel):
+    """Propositional Chunk created from the image."""
+    image_path: str = Field(description="Path to the image.")
+    chunk_number: str = Field(description="Sequence number given to the chunk.")
+    propositional_chunk: str = Field(description="Propositional chunk from the image.")
+
+class PropositionalChunks(BaseModel):
+    """Propositional Chunk created from the image."""
+    image_path: str = Field(description="Path to the image for which the propositional chunks were created.")
+    """Consolidated Propositional Chunks created from the image."""
+    propositional_chunks: List[PropositionalChunk] = Field(description="List of Propositional chunks from the image.")
 
 def convert_images_to_propositional_chunks():
     model_id = "gpt-4o-mini"
