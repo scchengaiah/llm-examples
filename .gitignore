@@ -25,3 +25,4 @@ settings.json
 *.sqlite
 
 04_advanced_rag/04_multimodal_rag/data/images
+04_advanced_rag/01_advanced_chunking_techniques/implementations/pdf_visual_summarizer/data/images

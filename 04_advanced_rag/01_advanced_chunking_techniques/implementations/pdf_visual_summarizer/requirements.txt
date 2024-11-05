@@ -1,0 +1,5 @@
+pymupdf
+langchain-core
+langchain-openai
+langchain-postgres
+python-dotenv
