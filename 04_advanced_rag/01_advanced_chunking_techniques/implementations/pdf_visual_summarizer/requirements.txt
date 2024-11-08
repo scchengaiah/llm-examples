@@ -2,4 +2,7 @@ pymupdf
 langchain-core
 langchain-openai
 langchain-postgres
+langchain-community
+sentence-transformers
+einops
 python-dotenv
