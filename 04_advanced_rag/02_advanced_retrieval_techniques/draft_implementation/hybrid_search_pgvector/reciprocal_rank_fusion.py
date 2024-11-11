@@ -45,19 +45,29 @@ keyword_search AS (
     WHERE to_tsvector('english', content) @@ query
     ORDER BY ts_rank_cd(to_tsvector('english', content), query) DESC
     LIMIT 20
+),
+top_results AS (
+    SELECT
+        COALESCE(semantic_search.id, keyword_search.id) AS id,
+        COALESCE(1.0 / (%(k)s + semantic_search.rank), 0.0) +
+        COALESCE(1.0 / (%(k)s + keyword_search.rank), 0.0) AS score
+    FROM semantic_search
+    FULL OUTER JOIN keyword_search ON semantic_search.id = keyword_search.id
+    ORDER BY score DESC
+    LIMIT 5
 )
-SELECT
-    COALESCE(semantic_search.id, keyword_search.id) AS id,
-    COALESCE(1.0 / (%(k)s + semantic_search.rank), 0.0) +
-    COALESCE(1.0 / (%(k)s + keyword_search.rank), 0.0) AS score
-FROM semantic_search
-FULL OUTER JOIN keyword_search ON semantic_search.id = keyword_search.id
-ORDER BY score DESC
-LIMIT 5
+SELECT 
+    top_results.id, top_results.score, documents.content 
+FROM 
+    top_results, documents 
+WHERE top_results.id = documents.id
+ORDER BY top_results.score DESC
 """
 query = 'growling bear'
 embedding = model.encode(query)
 k = 60
 results = conn.execute(sql, {'query': query, 'embedding': embedding, 'k': k}).fetchall()
 for row in results:
+    print("*" * 20)
     print('document:', row[0], 'RRF score:', row[1])
+    print(row[2])

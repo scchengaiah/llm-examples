@@ -6,3 +6,4 @@ langchain-community
 sentence-transformers
 einops
 python-dotenv
+rank_bm25

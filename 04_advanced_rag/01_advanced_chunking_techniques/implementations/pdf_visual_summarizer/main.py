@@ -103,11 +103,11 @@ class PropositionalChunks(BaseModel):
 
 
 def convert_images_to_propositional_chunks():
-    model_id = "gpt-4o-mini"
+    model_id = "gpt-4o"
 
     azure_openai_model = AzureChatOpenAI(model=model_id, max_tokens=8192)
 
-    image_summarization_prompt = """
+    image_summarization_prompt_multiple_chunks = """
     You are an expert in understanding the provided image and convert it into a detailed textual representation. Make sure that you capture all aspects of the image and write detailed description of the image content.  Ensure that the textual representation of the image is as comprehensive as possible.
 
     Image path in the file system: {image_path}
@@ -134,7 +134,7 @@ def convert_images_to_propositional_chunks():
                     "type": "image_url",
                     "image_url": {"url": f"data:image/jpeg;base64,{encoded_string}"},
                 },
-                {"type": "text", "text": image_summarization_prompt.format(image_path=image_path)},
+                {"type": "text", "text": image_summarization_prompt_multiple_chunks.format(image_path=image_path)},
             ],
         )
         batch_messages.append([messages])
@@ -209,8 +209,8 @@ def init_pg_vectorstore(recreate_collection=False):
     db_host = "172.31.60.199"
     db_user = "admin"
     db_password = "admin"
-    db_name = "pgvector-exploration"
-    db_port = "15432"
+    db_name = "postgres"
+    db_port = "25432"
     # Database connection parameters
     db_params = {
         "dbname": db_name,
@@ -260,7 +260,6 @@ with open(file_path, 'rb') as file:
 
 
 # print_chunks()
-
 # ingest_to_vectorstore(recreate_collection = True)
 
 ########################################################################################################################
@@ -297,11 +296,11 @@ def generate_multiple_queries(user_query):
 
 
 user_query = "what are the services offered by JFSL ?"
-user_query = "who are the board of directors at JFSL ?"
+user_query = "who are the board of directors of JSFL ?"
 # To skip query expansion uncomment the below line and comment the following 2 lines.
-# queries = [user_query]
-queries = generate_multiple_queries(user_query)
-print(queries)
+queries = [user_query]
+# queries = generate_multiple_queries(user_query)
+# print(queries)
 
 
 ########################################################################################################################
@@ -540,9 +539,75 @@ def print_reranked_passages_results(reranked_passages_with_metadata):
 #                  for i, (passage_metadata, passage_content) in enumerate(reranked_passages_with_metadata)]
 # print_reranked_passages_results(reranked_passages_with_metadata)
 
-### Option 6:
+### Option 6: Hybrid Retrieval (BM25 + Embeddings)
 
+# We use ParadeDB that contains pgvector and pg_search and some advanced extensions.
+# Refer to the fork version here - https://github.com/scchengaiah/paradedb-fork
+# Docker command - https://github.com/scchengaiah/paradedb-fork/blob/dev/docker/standalone-docker-run.sh
 
+def hybrid_retrieval():
+    ## We use hardcoded SQL query on langchain_pg_embedding table. For actual implementation, create customized implementation
+    ## extending the langchain abstractions for standard usage.
+    sql = """
+    WITH semantic_search AS (
+        SELECT id, RANK () OVER (ORDER BY embedding <=> %(embedding)s::vector) AS rank
+        FROM langchain_pg_embedding ORDER BY embedding <=> %(embedding)s::vector LIMIT 20
+    ),
+    bm25_search AS (
+        SELECT id, RANK () OVER (ORDER BY paradedb.score(id) DESC) as rank
+        FROM langchain_pg_embedding WHERE document @@@ %(query)s LIMIT 20
+    )
+    SELECT
+        COALESCE(semantic_search.id, bm25_search.id) AS id,
+        COALESCE(1.0 / (%(k)s + semantic_search.rank), 0.0) +
+        COALESCE(1.0 / (%(k)s + bm25_search.rank), 0.0) AS score,
+        langchain_pg_embedding.document,
+        langchain_pg_embedding.embedding,
+        langchain_pg_embedding.cmetadata
+    FROM semantic_search
+    FULL OUTER JOIN bm25_search ON semantic_search.id = bm25_search.id
+    JOIN langchain_pg_embedding ON langchain_pg_embedding.id = COALESCE(semantic_search.id, bm25_search.id)
+    ORDER BY score DESC, document
+    LIMIT 5;
+    """
+
+    embeddings = AzureOpenAIEmbeddings(model="text-embedding-3-small", api_version="2024-02-01")
+    query_embeddings = embeddings.embed_query(user_query)
+    # Use a smaller value of k when you want to give more weight to the keyword search (BM25) results.
+    # Try setting k between 5 and 20. This keeps keyword relevance as the dominant factor but still allows semantic scores to contribute.
+
+    # Use a larger value of k to give more weight to the semantic search results.
+    # Set k between 60 and 100. Higher values make scores less sensitive to BM25 rank differences, letting the semantic search results have more influence.
+
+    # A value of k between 30 and 60 is typically ideal for balancing BM25 and semantic search
+    # Lower end (30-40): Slightly leans toward keyword relevance if that’s your preference.
+    # Higher end (50-60): Slightly favors semantic similarity but retains substantial keyword influence.
+    # Starting Value: k=50 is often a solid middle-ground starting point. This lets you achieve a reasonable balance, where both ranking lists contribute, yet neither dominates.
+    k = 50
+    db_host = "172.31.60.199"
+    db_user = "admin"
+    db_password = "admin"
+    db_name = "postgres"
+    db_port = "25432"
+    conn = psycopg.connect(dbname=db_name, 
+                            user=db_user, password=db_password, host=db_host, port=db_port,
+                            autocommit=True)
+    results = conn.execute(sql, {'query': user_query, 'embedding': query_embeddings, 'k': k}).fetchall()
+
+    reranked_docs = []
+    print(f"No of rows returned: {len(results)}")
+    for row in results:
+        reranked_docs.append(Document(page_content=row[2], metadata=row[4]))
+    return reranked_docs
+
+def print_hybrid_results(reranked_docs):
+    for doc in reranked_docs:
+        print("*" * 20)
+        print(f"Page number: {doc.metadata['page_number']}")
+        print(doc.page_content)
+
+reranked_docs = hybrid_retrieval()
+print_hybrid_results(reranked_docs)
 
 ########################################################################################################################
 
@@ -553,30 +618,36 @@ def print_reranked_passages_results(reranked_passages_with_metadata):
 ########################################################################################################################
 ### Option 1:
 # 1. Send the retrieved context to the LLM with appropriate prompt to answer the question.
-prompt = ChatPromptTemplate.from_template("""You are an assistant for question-answering tasks. Use the following pieces of retrieved context to answer the question. If you don't know the answer, just say that you cannot answer the question because of the insufficient context. Try to keep the answer concise and elaborate only if the question demands it.
 
-Question: {question} 
+def invoke_llm_rag_with_textual_context():
+    prompt = ChatPromptTemplate.from_template("""You are an assistant for question-answering tasks. Use the following pieces of retrieved context to answer the # question. If you don't know the answer, just say that you cannot answer the question because of the insufficient context without providing any additional # information. Try to keep the answer concise and elaborate only if the question demands it.
 
-## Context: 
-{context} 
+    Question: {question} 
 
-## Answer:
+    ## Context: 
+    {context} 
 
-""")
-formatted_context = "\n\n".join(
+    ## Answer:
+
+    """)
+    formatted_context = "\n\n".join(
     [doc.page_content for i, doc in enumerate(reranked_docs)])
 
-messages = prompt.format_messages(question=user_query, context=formatted_context)
-print("*" * 20)
-print("LLM INPUT:")
-print(messages[0].content)
-print("*" * 20)
-model_id = "gpt-4o"
-azure_openai_model = AzureChatOpenAI(model=model_id, max_tokens=8192)
-response = azure_openai_model.invoke(messages)
-print("*" * 20)
-print("Response:")
-print(response.content)
+    messages = prompt.format_messages(question=user_query, context=formatted_context)
+    print("*" * 20)
+    print("LLM INPUT:")
+    print(messages[0].content)
+    print("*" * 20)
+    model_id = "gpt-4o"
+    azure_openai_model = AzureChatOpenAI(model=model_id, max_tokens=8192)
+    response = azure_openai_model.invoke(messages)
+    print("*" * 20)
+    print("Response:")
+    print(response.content)
+
+# invoke_llm_rag_with_textual_context()
+
+### Option 2:
 
 ########################################################################################################################
 
