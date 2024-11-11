@@ -544,6 +544,7 @@ def print_reranked_passages_results(reranked_passages_with_metadata):
 # We use ParadeDB that contains pgvector and pg_search and some advanced extensions.
 # Refer to the fork version here - https://github.com/scchengaiah/paradedb-fork
 # Docker command - https://github.com/scchengaiah/paradedb-fork/blob/dev/docker/standalone-docker-run.sh
+# Docs - https://docs.paradedb.com/documentation/guides/hybrid
 
 def hybrid_retrieval():
     ## We use hardcoded SQL query on langchain_pg_embedding table. For actual implementation, create customized implementation
@@ -683,7 +684,7 @@ def invoke_llm_rag_with_image_context():
     print("Response:")
     print(response.content)
 
-invoke_llm_rag_with_image_context()
+# invoke_llm_rag_with_image_context()
 
 ########################################################################################################################
 

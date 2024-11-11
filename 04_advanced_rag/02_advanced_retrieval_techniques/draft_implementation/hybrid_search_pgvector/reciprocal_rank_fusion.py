@@ -1,5 +1,12 @@
 # https://github.com/pgvector/pgvector-python/blob/master/examples/hybrid_search/rrf.py
 
+# The below version of the implementation is based on the default implementation of postgresql full text search capablities.
+# This may not fit well for the BM25 based search.
+# We can leverage an extension developed by paradedb for better hybrid retrieval.
+# Refer to the fork version here - https://github.com/scchengaiah/paradedb-fork
+# Docker command - https://github.com/scchengaiah/paradedb-fork/blob/dev/docker/standalone-docker-run.sh
+# Docs - https://docs.paradedb.com/documentation/guides/hybrid
+
 from pgvector.psycopg import register_vector
 import psycopg
 from sentence_transformers import SentenceTransformer
