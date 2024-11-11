@@ -1,5 +1,15 @@
 ## Activities: 
 
+# The following implementation generates chunks from the pdf document by converting the pdf pages into images 
+# and then summarizing the images into multiple chunks per page using LLM.
+
+# The summarized chunks are then ingested into the vector store and several retrieval techniques are employed
+# to perform RAG.
+
+# How to run this code ?
+# Follow along the comments and uncomment the specific part of the code that you are interested in.
+# Make sure the other parts are commented out to check each feature individually.
+
 ### Data Ingestion:
 # 1. Read PDF by page and convert each page into an image for LLM Summarization. (Detailed Summary with multiple chunks.)
 # 2. Summarize each image using LLM.
@@ -13,6 +23,7 @@
 #    Rerank leveraging encoder based models.
 #    Rerank using LLM.
 #    Contextual embedding + BM25 search
+# 4. Hybrid search (BM25 + Embeddings)
 
 ### Response Generation
 ### Option 1:
