@@ -10,6 +10,10 @@ import psycopg
 import os
 from dotenv import load_dotenv
 
+# The below example is taken from 
+# https://github.com/NirDiamant/RAG_Techniques/blob/f212f9a5b9455d9aa8cd046966a382db14872aec/all_rag_techniques_runnable_scripts/fusion_retrieval.py
+# We have leveraged Postgresql equivalent of this in the main implementation.
+
 class PropositionalChunk(BaseModel):
     """Propositional Chunk created from the image."""
     image_path: str = Field(description="Path to the image.")
@@ -113,12 +117,15 @@ env_loaded = load_dotenv()
 print(f"Env loaded: {env_loaded}")
 
 
-temp_dir = "./temp"
+# Use an absolute path or a path relative to the script's location
+script_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.dirname(script_dir)
+temp_dir = os.path.join(project_root, "temp")
 
 # Refer to main.py for the creation of pickle file.
 # We have directly used the file created through main.py to avoid re-invoking the model.
 
-file_path = f"{temp_dir}/image_description_1730829480476374600.pkl"
+file_path = os.path.join(temp_dir, "image_description_1730829480476374600.pkl")
 
 with open(file_path, 'rb') as file:
     loaded_image_description = pickle.load(file)
