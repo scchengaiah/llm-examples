@@ -295,7 +295,7 @@ def generate_multiple_queries(user_query):
     return response.questions
 
 
-user_query = "what are the services offered by JFSL ?"
+# user_query = "what are the services offered by JFSL ?"
 user_query = "who are the board of directors of JSFL ?"
 # To skip query expansion uncomment the below line and comment the following 2 lines.
 queries = [user_query]
@@ -583,7 +583,7 @@ def hybrid_retrieval():
     # Lower end (30-40): Slightly leans toward keyword relevance if that’s your preference.
     # Higher end (50-60): Slightly favors semantic similarity but retains substantial keyword influence.
     # Starting Value: k=50 is often a solid middle-ground starting point. This lets you achieve a reasonable balance, where both ranking lists contribute, yet neither dominates.
-    k = 50
+    k = 10
     db_host = "172.31.60.199"
     db_user = "admin"
     db_password = "admin"
@@ -607,7 +607,7 @@ def print_hybrid_results(reranked_docs):
         print(doc.page_content)
 
 reranked_docs = hybrid_retrieval()
-print_hybrid_results(reranked_docs)
+# print_hybrid_results(reranked_docs)
 
 ########################################################################################################################
 
@@ -620,16 +620,13 @@ print_hybrid_results(reranked_docs)
 # 1. Send the retrieved context to the LLM with appropriate prompt to answer the question.
 
 def invoke_llm_rag_with_textual_context():
-    prompt = ChatPromptTemplate.from_template("""You are an assistant for question-answering tasks. Use the following pieces of retrieved context to answer the # question. If you don't know the answer, just say that you cannot answer the question because of the insufficient context without providing any additional # information. Try to keep the answer concise and elaborate only if the question demands it.
+    prompt = ChatPromptTemplate.from_template("You are an assistant for question-answering tasks. Use the following pieces of retrieved context to answer the question. "
+    "If you don’t know the answer, just say that you cannot answer the question due to insufficient context without providing any additional information. "
+    "Try to keep the answer concise and elaborate only if the question demands it.\n\n"
+    "Question: {question}\n\n"
+    "Context: \n{context}\n\n"
+    "Answer:\n")
 
-    Question: {question} 
-
-    ## Context: 
-    {context} 
-
-    ## Answer:
-
-    """)
     formatted_context = "\n\n".join(
     [doc.page_content for i, doc in enumerate(reranked_docs)])
 
@@ -638,7 +635,7 @@ def invoke_llm_rag_with_textual_context():
     print("LLM INPUT:")
     print(messages[0].content)
     print("*" * 20)
-    model_id = "gpt-4o"
+    model_id = "gpt-4o-mini"
     azure_openai_model = AzureChatOpenAI(model=model_id, max_tokens=8192)
     response = azure_openai_model.invoke(messages)
     print("*" * 20)
@@ -648,6 +645,45 @@ def invoke_llm_rag_with_textual_context():
 # invoke_llm_rag_with_textual_context()
 
 ### Option 2:
+
+# The below method consumes is performance intensive but, is more robust.
+# We pass the pdf pages as images to the LLM that provides more context for the LLM to generate the answer.
+
+def invoke_llm_rag_with_image_context():
+
+    rag_image_as_context_prompt = ("You are an assistant for question-answering tasks. Use the provided images as context to answer the question. "
+    "If you don’t know the answer, just say that you cannot answer the question due to insufficient context without providing any additional information. "
+    "Try to keep the answer concise and elaborate only if the question demands it.\n\n"
+    "Question: {question}\n\n"
+    "Answer:\n")
+
+    unique_image_paths = set()
+
+    for doc in reranked_docs:
+        unique_image_paths.add(doc.metadata['image_path'])
+
+    content = []
+    for image_path in unique_image_paths:
+        # Read the image file and encode it to base64
+        with open(image_path, "rb") as image_file:
+            encoded_string = base64.b64encode(image_file.read()).decode('utf-8')
+            content.append({
+                "type": "image_url",
+                "image_url": {"url": f"data:image/jpeg;base64,{encoded_string}"},
+            })
+
+    content.append({"type": "text", "text": rag_image_as_context_prompt.format(question=user_query)})
+
+    messages = HumanMessage(content)
+
+    model_id = "gpt-4o-mini"
+    azure_openai_model = AzureChatOpenAI(model=model_id, max_tokens=8192)
+    response = azure_openai_model.invoke([messages])
+    print("*" * 20)
+    print("Response:")
+    print(response.content)
+
+invoke_llm_rag_with_image_context()
 
 ########################################################################################################################
 
