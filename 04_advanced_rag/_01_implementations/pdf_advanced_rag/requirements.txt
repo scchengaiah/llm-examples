@@ -3,7 +3,10 @@ langchain-core
 langchain-openai
 langchain-postgres
 langchain-community
+langchain-together
+langchain-experimental
 sentence-transformers
 einops
 python-dotenv
 rank_bm25
+spacy
