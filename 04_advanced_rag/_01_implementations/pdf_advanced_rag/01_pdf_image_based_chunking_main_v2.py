@@ -9,6 +9,7 @@
 ## TODO
 ## - To incorporate custom PGRetrieval strategy to use BM25 + Semantic Search for better recall via ParadeDB.
 ## - The output of the BM25 + Semantic Search shall then be leveraged by the MultiVector Retriever.
+##   (https://python.langchain.com/docs/integrations/stores/)
 ## - Setup a customized implementation to replace doc store with Postgresql specific implementation for better scalability.
 ## - Use Cohere Reranker on Azure to reduce local dependency.
 ## - Setup an end to end example leveraging all these aspects into a single application. (Preferably Streamlit to demonstrate the quality of the RAG implementation.)
