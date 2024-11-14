@@ -806,7 +806,9 @@ multi_vector_retriever = MultiVectorRetriever(
         byte_store = LocalFileStore(os.path.join(temp_dir, "byte-store")),
         id_key="doc_id",
         search_type="similarity",
-        search_kwargs= {"k": 25, "score_threshold": 0.5} # For the overall retriever, gets reflected for multi_vector_retriever.invoke(query) method.
+        # For the overall retriever, gets reflected for multi_vector_retriever.invoke(query) method.
+        # score_threshold is only valid if search_type="similarity_score_threshold"
+        search_kwargs= {"k": 25, "score_threshold": 0.5}
 )
 # The vector store alone from the multi_vector_retriever shall return smaller chunks fetched from the vector store.
 # docs = multi_vector_retriever.vectorstore.similarity_search(user_query, k=20)
@@ -817,6 +819,7 @@ model = HuggingFaceCrossEncoder(model_name="BAAI/bge-reranker-base", # Context l
                                     model_kwargs={"trust_remote_code": True})
 
 ###compressor = CrossEncoderReranker(model=model, top_n=4)
+# Less Performant - Rank 3 :)
 ### compressor = FlashrankRerank(top_n=4)
 # Better performing ReRanking Model - Rank 1 :)
 compressor = CohereRerank(model="rerank-multilingual-v3.0", top_n=4)
