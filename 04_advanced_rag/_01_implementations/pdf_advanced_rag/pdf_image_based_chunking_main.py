@@ -368,7 +368,7 @@ def rerank_docs_with_bge_reranker():
     vector_store = init_pg_vectorstore(recreate_collection=False)
     retriever = vector_store.as_retriever(search_type="mmr", search_kwargs={"k": 5})
 
-    model = HuggingFaceCrossEncoder(model_name="BAAI/bge-reranker-base")
+    model = HuggingFaceCrossEncoder(model_name="BAAI/bge-reranker-base") # Context length : 512
     compressor = CrossEncoderReranker(model=model, top_n=3)
     compression_retriever = ContextualCompressionRetriever(
         base_compressor=compressor, base_retriever=retriever
@@ -563,11 +563,11 @@ def hybrid_retrieval():
     sql = """
     WITH semantic_search AS (
         SELECT id, RANK () OVER (ORDER BY embedding <=> %(embedding)s::vector) AS rank
-        FROM langchain_pg_embedding ORDER BY embedding <=> %(embedding)s::vector LIMIT 20
+        FROM langchain_pg_embedding ORDER BY embedding <=> %(embedding)s::vector LIMIT 50
     ),
     bm25_search AS (
         SELECT id, RANK () OVER (ORDER BY paradedb.score(id) DESC) as rank
-        FROM langchain_pg_embedding WHERE document @@@ %(query)s LIMIT 20
+        FROM langchain_pg_embedding WHERE document @@@ %(query)s LIMIT 50
     )
     SELECT
         COALESCE(semantic_search.id, bm25_search.id) AS id,
@@ -580,7 +580,7 @@ def hybrid_retrieval():
     FULL OUTER JOIN bm25_search ON semantic_search.id = bm25_search.id
     JOIN langchain_pg_embedding ON langchain_pg_embedding.id = COALESCE(semantic_search.id, bm25_search.id)
     ORDER BY score DESC, document
-    LIMIT 5;
+    LIMIT 20;
     """
 
     embeddings = AzureOpenAIEmbeddings(model="text-embedding-3-small", api_version="2024-02-01")
@@ -654,7 +654,7 @@ def invoke_llm_rag_with_textual_context():
     print("Response:")
     print(response.content)
 
-# invoke_llm_rag_with_textual_context()
+invoke_llm_rag_with_textual_context()
 
 ### Option 2:
 
