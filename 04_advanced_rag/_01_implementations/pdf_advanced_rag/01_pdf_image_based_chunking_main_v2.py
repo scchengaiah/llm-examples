@@ -17,6 +17,7 @@
 
 import base64
 import json
+from math import ceil
 import os
 from typing import List
 from langchain_core.messages import HumanMessage
@@ -48,6 +49,7 @@ from langchain.retrievers import ContextualCompressionRetriever
 from itertools import chain
 from langchain.retrievers.multi_vector import MultiVectorRetriever
 from langchain.storage import LocalFileStore
+import time
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.dirname(script_dir)
@@ -498,8 +500,8 @@ def init_pg_vectorstore(recreate_collection=False):
     }
 
     # Connect to the PostgreSQL database
-    with psycopg.connect(**db_params) as conn:
-        print("Postgresql Test connection successful.")
+    # with psycopg.connect(**db_params) as conn:
+    #     print("Postgresql Test connection successful.")
 
     connection = f"postgresql+psycopg://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
     collection_name = "pdf_visualizer_test"
@@ -807,8 +809,8 @@ def rerank_docs_with_embeddings_filter(user_query, k=20):
         k = len(compressed_docs)
     return compressed_docs[:k]
 
-# user_query = "who are the board of directors of JSFL ? Explain about them."
-user_query = "what is the message from the management to investors ? Explain in detail who said what ?"
+user_query = "who are the board of directors of JSFL ? Explain about them."
+# user_query = "what is the message from the management to investors ? Explain in detail who said what ?"
 # user_query = "what are the services offered by JFSL ?"
 # user_query = "Explain about JIO Financial app features."
 # user_query = "Zulässige Kombination für Querschnittsprünge"
@@ -817,7 +819,7 @@ user_query = "what is the message from the management to investors ? Explain in 
 # reranked_docs = hybrid_retrieval(user_query)
 # reranked_docs = rerank_docs_with_embeddings_filter(user_query)
 
-ingest_to_vectorstore_with_multi_vector_retriever(recreate_collection=True)
+# ingest_to_vectorstore_with_multi_vector_retriever(recreate_collection=True)
 multi_vector_retriever = MultiVectorRetriever(
         vectorstore=init_pg_vectorstore(recreate_collection=False),
         byte_store = LocalFileStore(os.path.join(temp_dir, "byte-store")),
@@ -832,15 +834,18 @@ multi_vector_retriever = MultiVectorRetriever(
 docs = multi_vector_retriever.invoke(user_query)
 
 # Rank 2 :)
-model = HuggingFaceCrossEncoder(model_name="BAAI/bge-reranker-base", # Context length : 512
-                                    model_kwargs={"trust_remote_code": True})
+# model = HuggingFaceCrossEncoder(model_name="BAAI/bge-reranker-base", model_kwargs={"trust_remote_code": True}) # Context length: 512
 
 ### compressor = CrossEncoderReranker(model=model, top_n=4)
 # Less Performant - Rank 3 :)
 ### compressor = FlashrankRerank(top_n=4)
 # Better performing ReRanking Model - Rank 1 :)
+print("Using CohereRerank - START")
+rerank_start_time = time.time()
 compressor = CohereRerank(model="rerank-multilingual-v3.0", top_n=4)
 docs = compressor.compress_documents(docs, user_query)
+print("Using CohereRerank - END")
+print(f"Time taken to rerank documents: {time.time() - rerank_start_time} seconds")
 
 ### for i, doc in enumerate(docs):
 ###     print("-" * 80)
