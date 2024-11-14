@@ -10,6 +10,7 @@
 ## - To incorporate custom PGRetrieval strategy to use BM25 + Semantic Search for better recall via ParadeDB.
 ## - The output of the BM25 + Semantic Search shall then be leveraged by the MultiVector Retriever.
 ## - Setup a customized implementation to replace doc store with Postgresql specific implementation for better scalability.
+## - Use Cohere Reranker on Azure to reduce local dependency.
 ## - Setup an end to end example leveraging all these aspects into a single application. (Preferably Streamlit to demonstrate the quality of the RAG implementation.)
 
 
@@ -50,8 +51,8 @@ from langchain.storage import LocalFileStore
 script_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.dirname(script_dir)
 data_dir = os.path.join(project_root, "data")
-image_dir = os.path.join(data_dir, "images")
-temp_dir = os.path.join(project_root, "temp")
+image_dir = "./data/images"
+temp_dir = "./temp"
 chunk_dir= os.path.join(temp_dir, "chunks")
 pdf_file = os.path.join(data_dir, "jio-financial-services-annual-report-2023-2024-small.pdf")
 # pdf_file = "C:/Users/20092/Downloads/test2/20230725_Designrules_PORSCHE_V01.pdf"
@@ -621,13 +622,13 @@ def ingest_to_vectorstore_with_multi_vector_retriever(recreate_collection=True):
         id_key=id_key,
     )
 
-    for i, _ in enumerate(chunk_dir):
+    for i, _ in enumerate(os.listdir(chunk_dir)):
         # Increment by one to start from 1
         idx = i+1
         filename = f"page-chunk-output-{idx}.md"
         file_path = os.path.join(chunk_dir, filename)
         if os.path.exists(file_path):
-            with open(os.path.join(chunk_dir, file_path), 'rb') as file:
+            with open(file_path, 'rb') as file:
                 print("Processing file:", file_path)
                 markdown_text = file.read().decode('utf-8')
 
@@ -805,8 +806,8 @@ def rerank_docs_with_embeddings_filter(user_query, k=20):
         k = len(compressed_docs)
     return compressed_docs[:k]
 
-user_query = "who are the board of directors of JSFL ? Explain about them."
-# user_query = "what is the message from the management to investors ? Explain in detail who said what ?"
+# user_query = "who are the board of directors of JSFL ? Explain about them."
+user_query = "what is the message from the management to investors ? Explain in detail who said what ?"
 # user_query = "what are the services offered by JFSL ?"
 # user_query = "Explain about JIO Financial app features."
 # user_query = "Zulässige Kombination für Querschnittsprünge"
@@ -815,7 +816,7 @@ user_query = "who are the board of directors of JSFL ? Explain about them."
 # reranked_docs = hybrid_retrieval(user_query)
 # reranked_docs = rerank_docs_with_embeddings_filter(user_query)
 
-# ingest_to_vectorstore_with_multi_vector_retriever(recreate_collection=True)
+ingest_to_vectorstore_with_multi_vector_retriever(recreate_collection=True)
 multi_vector_retriever = MultiVectorRetriever(
         vectorstore=init_pg_vectorstore(recreate_collection=False),
         byte_store = LocalFileStore(os.path.join(temp_dir, "byte-store")),
@@ -833,7 +834,7 @@ docs = multi_vector_retriever.invoke(user_query)
 model = HuggingFaceCrossEncoder(model_name="BAAI/bge-reranker-base", # Context length : 512
                                     model_kwargs={"trust_remote_code": True})
 
-###compressor = CrossEncoderReranker(model=model, top_n=4)
+### compressor = CrossEncoderReranker(model=model, top_n=4)
 # Less Performant - Rank 3 :)
 ### compressor = FlashrankRerank(top_n=4)
 # Better performing ReRanking Model - Rank 1 :)
