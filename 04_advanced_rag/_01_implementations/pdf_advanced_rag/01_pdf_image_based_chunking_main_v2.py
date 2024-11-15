@@ -56,7 +56,7 @@ import time
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.dirname(script_dir)
-data_dir = os.path.join(project_root, "data")
+data_dir = "./data"
 image_dir = "./data/images"
 temp_dir = "./temp"
 chunk_dir= os.path.join(temp_dir, "chunks")
@@ -101,7 +101,6 @@ def pdf_to_markdown ():
     pages = [0,1,2,18,19,20]
     pages = []
     convert_pdf_to_images(pages)
-
     image_path_list = os.listdir(image_dir)
 
     openai_model_id = "gpt-4o-mini"
@@ -426,7 +425,7 @@ def pdf_to_markdown ():
     response_to_markdown(batch_response)
 
 
-# pdf_to_markdown()
+pdf_to_markdown()
 
 def reconstruct_markdown(splits, headers_to_split_on):
     # Dictionary to store the structured content
@@ -887,5 +886,5 @@ def invoke_llm_rag_with_textual_context():
     for chunk in azure_openai_model.stream(messages):
         print(chunk.content, end="", flush=True)
 
-invoke_llm_rag_with_textual_context()
+# invoke_llm_rag_with_textual_context()
 
