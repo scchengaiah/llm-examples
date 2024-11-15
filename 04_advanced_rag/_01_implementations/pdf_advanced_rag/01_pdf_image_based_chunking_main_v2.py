@@ -7,13 +7,16 @@
 ## 6. Invoke LLM with the Reranked docs to generate response.
 
 ## TODO
+
+##   COMPLETED:
+## - Use Cohere Reranker on Azure to reduce local dependency. - DONE (Refer to .env.example or .env file for the endpoint related info)
+
+##   IN PROGRESS:
 ## - To incorporate custom PGRetrieval strategy to use BM25 + Semantic Search for better recall via ParadeDB.
 ## - The output of the BM25 + Semantic Search shall then be leveraged by the MultiVector Retriever.
 ##   (https://python.langchain.com/docs/integrations/stores/)
 ## - Setup a customized implementation to replace doc store with Postgresql specific implementation for better scalability.
-## - Use Cohere Reranker on Azure to reduce local dependency.
 ## - Setup an end to end example leveraging all these aspects into a single application. (Preferably Streamlit to demonstrate the quality of the RAG implementation.)
-
 
 import base64
 import json
@@ -885,3 +888,4 @@ def invoke_llm_rag_with_textual_context():
         print(chunk.content, end="", flush=True)
 
 invoke_llm_rag_with_textual_context()
+
