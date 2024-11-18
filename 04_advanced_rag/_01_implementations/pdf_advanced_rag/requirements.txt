@@ -12,4 +12,4 @@ rank_bm25
 spacy
 flashrank
 langchain-cohere
-unstructured[all-docs] 
+docling
