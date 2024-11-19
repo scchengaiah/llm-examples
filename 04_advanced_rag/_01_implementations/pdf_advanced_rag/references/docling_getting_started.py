@@ -11,6 +11,7 @@ from docling.document_converter import DocumentConverter, PdfFormatOption
 from docling.models.tesseract_ocr_cli_model import TesseractCliOcrOptions
 from docling.models.tesseract_ocr_model import TesseractOcrOptions
 from docling_core.types.doc import ImageRefMode, PictureItem, TableItem
+from docling_core.transforms.chunker import HierarchicalChunker
 import os
 import logging
 import time
@@ -28,10 +29,10 @@ temp_dir = os.path.join(project_root, "temp")
 os.makedirs(temp_dir, exist_ok=True)
 os.makedirs(image_dir, exist_ok=True)
 
-# pdf_file_path = os.path.join(data_dir, "jio-financial-services-annual-report-2023-2024-small.pdf")
+pdf_file_path = os.path.join(data_dir, "jio-financial-services-annual-report-2023-2024-small.pdf")
 
 # pdf with images and tables (Docling Technical paper)
-pdf_file_path = "https://arxiv.org/pdf/2408.09869"
+# pdf_file_path = "https://arxiv.org/pdf/2408.09869"
 
 _log = logging.getLogger(__name__)
 
@@ -352,3 +353,102 @@ def image_export():
 
 # image_export()
 
+# Convert the PDF into DocLing specific document and export every page of the PDF to markdown format.
+# Note that this implementation does not consider images embedded as part of the page.
+def markdown_export_per_page():
+    logging.basicConfig(level=logging.INFO)
+
+    output_dir = Path(temp_dir)
+
+    pipeline_options = PdfPipelineOptions()
+    pipeline_options.do_ocr = True
+    pipeline_options.do_table_structure = True
+    pipeline_options.ocr_options.use_gpu = True
+    pipeline_options.table_structure_options.do_cell_matching = False
+    pipeline_options.table_structure_options.mode = TableFormerMode.ACCURATE
+
+    doc_converter = DocumentConverter(
+        format_options={
+            InputFormat.PDF: PdfFormatOption(
+                pipeline_options=pipeline_options
+            )
+        }
+    )
+
+    start_time = time.time()
+
+    conv_res = doc_converter.convert(pdf_file_path)
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    doc_filename = conv_res.input.file.stem
+
+    for page_no, page in conv_res.document.pages.items():
+        _log.info(f"Processing Page number: {page_no}")
+        content_md = conv_res.document.export_to_markdown(page_no=page_no, image_placeholder="")
+        md_filename = output_dir / f"{doc_filename}-{page_no}.md"
+        with md_filename.open("wb") as fp:
+            fp.write(content_md.encode("utf-8"))
+
+    end_time = time.time() - start_time
+
+    _log.info(f"Document converted and written to markdown per page in {end_time:.2f} seconds.")
+
+# markdown_export_per_page()
+
+
+def markdown_export_per_page_with_images():
+    logging.basicConfig(level=logging.INFO)
+
+    output_dir = Path(temp_dir)
+
+    pipeline_options = PdfPipelineOptions()
+    pipeline_options.do_ocr = False
+    pipeline_options.do_table_structure = True
+    pipeline_options.images_scale = IMAGE_RESOLUTION_SCALE
+    pipeline_options.generate_picture_images = True
+    pipeline_options.ocr_options.use_gpu = True
+    pipeline_options.table_structure_options.do_cell_matching = True
+    pipeline_options.table_structure_options.mode = TableFormerMode.FAST
+
+    doc_converter = DocumentConverter(
+        format_options={
+            InputFormat.PDF: PdfFormatOption(
+                pipeline_options=pipeline_options, backend=PyPdfiumDocumentBackend
+            )
+        }
+    )
+
+    start_time = time.time()
+
+    conv_res = doc_converter.convert(pdf_file_path)
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    doc_filename = conv_res.input.file.stem
+
+    _log.info(f"Number of pages in the document: {len(conv_res.document.pages)}")
+
+    for page_no, page in conv_res.document.pages.items():
+        _log.info(f"Processing Page number: {page_no}")
+        content_md = conv_res.document.export_to_markdown(page_no=page_no, image_placeholder="")
+        page_dir = Path(os.path.join(output_dir, f"page-{page_no}"))
+        page_dir.mkdir(parents=True, exist_ok=True)
+        md_filename = page_dir / f"{doc_filename}-{page_no}.md"
+        with md_filename.open("wb") as fp:
+            fp.write(content_md.encode("utf-8"))
+        
+        # Iterate images and save to page_dir
+        picture_counter = 0
+        for element, _ in conv_res.document.iterate_items(page_no=page_no):
+            if isinstance(element, PictureItem):
+                picture_counter += 1
+                element_image_filename = (
+                    page_dir / f"{doc_filename}-picture-{picture_counter}.png"
+                )
+                with element_image_filename.open("wb") as fp:
+                    element.image.pil_image.save(fp, "PNG")
+
+    end_time = time.time() - start_time
+
+    _log.info(f"Document converted and written to markdown per page in {end_time:.2f} seconds.")
+
+# markdown_export_per_page_with_images()
