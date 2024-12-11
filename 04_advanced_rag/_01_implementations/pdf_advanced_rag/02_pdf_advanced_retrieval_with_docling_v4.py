@@ -8,10 +8,14 @@
 ## We need tesseract to be available in PATH variable for the below code to work
 ## Downloaded from - https://github.com/UB-Mannheim/tesseract/releases
 
+## Version: V4
+## This version contains implementation to leverage Postgresql as our byte store to store parent documents.
+
 import logging
 import os
 import time
 import uuid
+from functools import lru_cache
 from pathlib import Path
 from typing import List
 
@@ -35,6 +39,7 @@ from langchain_text_splitters.markdown import (
     MarkdownHeaderTextSplitter,
     MarkdownTextSplitter,
 )
+from numpy import byte
 from pydantic import BaseModel, Field
 
 from custom.postgresql_store import PostgresqlStore
@@ -66,6 +71,8 @@ headers_to_split_on = [
 
 openai_model_id = "gpt-4o-mini"
 azure_openai_model = AzureChatOpenAI(model=openai_model_id, max_tokens=8192)
+
+byte_store = None
 
 
 def markdown_export_per_page():
@@ -243,7 +250,8 @@ def prepare_docs_from_chunks():
     return parent_docs, child_docs
 
 
-def init_pg_vectorstore(recreate_collection=False):
+@lru_cache(maxsize=1)
+def get_db_connection_string():
     db_host = "172.31.60.199"
     db_user = "admin"
     db_password = "admin"
@@ -262,9 +270,14 @@ def init_pg_vectorstore(recreate_collection=False):
     # with psycopg.connect(**db_params) as conn:
     #     print("Postgresql Test connection successful.")
 
-    connection = (
+    connection_string = (
         f"postgresql+psycopg://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
     )
+    return connection_string
+
+
+def init_pg_vectorstore(recreate_collection=False):
+
     collection_name = "pdf_visualizer_test"
 
     embeddings = AzureOpenAIEmbeddings(
@@ -274,7 +287,7 @@ def init_pg_vectorstore(recreate_collection=False):
     vectorstore = PGVector(
         embeddings=embeddings,
         collection_name=collection_name,
-        connection=connection,
+        connection=get_db_connection_string(),
         use_jsonb=True,
     )
 
@@ -288,13 +301,26 @@ def init_pg_vectorstore(recreate_collection=False):
     return vectorstore
 
 
-def ingest_to_vectorstore_with_multi_vector_retriever(recreate_collection=True):
-    byte_store = LocalFileStore(os.path.join(temp_dir, "byte-store"))
+@lru_cache(maxsize=2)
+def get_byte_store(collection):
+    byte_store = PostgresqlStore(
+        connection_string=get_db_connection_string(),
+        collection=collection,
+    )
+    return byte_store
+
+
+def ingest_to_vectorstore_with_multi_vector_retriever_pgstore(recreate_collection=True):
     id_key = "doc_id"
+    vectorstore = init_pg_vectorstore(recreate_collection)
+
+    with vectorstore._make_sync_session() as session:
+        collection = vectorstore.get_collection(session=session)
+
     # The retriever (empty to start)
     retriever = MultiVectorRetriever(
-        vectorstore=init_pg_vectorstore(recreate_collection),
-        byte_store=byte_store,
+        vectorstore=vectorstore,
+        byte_store=get_byte_store(collection),
         id_key=id_key,
     )
 
@@ -453,18 +479,18 @@ def invoke_llm_rag_with_textual_context():
 # Parent docs hold the content of the entire page.
 # Child docs hold chunked content for all the pages.
 # parent_docs, child_docs = prepare_docs_from_chunks()
-# ingest_to_vectorstore_with_multi_vector_retriever(recreate_collection=True)
+# ingest_to_vectorstore_with_multi_vector_retriever_pgstore(recreate_collection=True)
 
 user_query = "who are the board of directors ? Explain about them."
 
 multi_vector_retriever = MultiVectorRetriever(
     vectorstore=init_pg_vectorstore(recreate_collection=False),
-    byte_store=LocalFileStore(os.path.join(temp_dir, "byte-store")),
+    byte_store=get_byte_store(collection=None),
     id_key="doc_id",
     search_type="similarity",
     # For the overall retriever, gets reflected for multi_vector_retriever.invoke(query) method.
     # score_threshold is only valid if search_type="similarity_score_threshold"
-    search_kwargs={"k": 25, "score_threshold": 0.5},
+    search_kwargs={"k": 10, "score_threshold": 0.5},
 )
 
 response_start_time = time.time()
