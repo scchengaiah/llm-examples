@@ -14,9 +14,9 @@ In this exploration, we shall create our own MCP server and client and establish
 
 We followed the [Quickstart](https://modelcontextprotocol.io/quickstart) setup to perform this exploration.
 
-The locally created MCP server can be found [here](./mcp-server/).
+The locally created MCP server can be found [here](./mcp-servers/).
 
-The locally created MCP client can be found [here](./mcp-client/).
+The locally created MCP client can be found [here](./mcp-clients/).
 
 
 ## References
