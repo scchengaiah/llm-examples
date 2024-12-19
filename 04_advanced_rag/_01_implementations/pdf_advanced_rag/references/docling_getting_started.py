@@ -4,20 +4,20 @@
 
 ## Technical Paper: https://arxiv.org/pdf/2408.09869
 
+import json
+import logging
+import os
+import time
+from pathlib import Path
+
 from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.pipeline_options import PdfPipelineOptions, TableFormerMode
 from docling.document_converter import DocumentConverter, PdfFormatOption
 from docling.models.tesseract_ocr_cli_model import TesseractCliOcrOptions
 from docling.models.tesseract_ocr_model import TesseractOcrOptions
-from docling_core.types.doc import ImageRefMode, PictureItem, TableItem
 from docling_core.transforms.chunker import HierarchicalChunker
-import os
-import logging
-import time
-import json
-from pathlib import Path
-
+from docling_core.types.doc import ImageRefMode, PictureItem, TableItem
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.dirname(script_dir)
@@ -29,7 +29,9 @@ temp_dir = os.path.join(project_root, "temp")
 os.makedirs(temp_dir, exist_ok=True)
 os.makedirs(image_dir, exist_ok=True)
 
-pdf_file_path = os.path.join(data_dir, "jio-financial-services-annual-report-2023-2024-small.pdf")
+pdf_file_path = os.path.join(
+    data_dir, "jio-financial-services-annual-report-2023-2024-small.pdf"
+)
 
 # pdf with images and tables (Docling Technical paper)
 # pdf_file_path = "https://arxiv.org/pdf/2408.09869"
@@ -37,6 +39,7 @@ pdf_file_path = os.path.join(data_dir, "jio-financial-services-annual-report-202
 _log = logging.getLogger(__name__)
 
 IMAGE_RESOLUTION_SCALE = 2.0
+
 
 def simple_example():
     print("Instantiating DocumentConverter...")
@@ -51,7 +54,9 @@ def simple_example():
 
     print(f"Time taken for conversion: {time.time() - start_time}")
 
+
 # simple_example()
+
 
 ## https://ds4sd.github.io/docling/examples/custom_convert/
 def custom_example():
@@ -79,25 +84,25 @@ def custom_example():
 
     # CODE:
 
-    # pipeline_options = PdfPipelineOptions()
-    # pipeline_options.do_ocr = False
-    # pipeline_options.do_table_structure = True
-    # pipeline_options.table_structure_options.do_cell_matching = False
+    pipeline_options = PdfPipelineOptions()
+    pipeline_options.do_ocr = False
+    pipeline_options.do_table_structure = True
+    pipeline_options.table_structure_options.do_cell_matching = False
 
-    # doc_converter = DocumentConverter(
-    #     format_options={
-    #         InputFormat.PDF: PdfFormatOption(
-    #             pipeline_options=pipeline_options, backend=PyPdfiumDocumentBackend
-    #         )
-    #     }
-    # )
+    doc_converter = DocumentConverter(
+        format_options={
+            InputFormat.PDF: PdfFormatOption(
+                pipeline_options=pipeline_options, backend=PyPdfiumDocumentBackend
+            )
+        }
+    )
 
     # -----------------------------------------------------------------------------------------------
     # PyPdfium with EasyOCR
     # -----------------------------------------------------------------------------------------------
 
     # OBSERVATION:
-    # 1. Took 50 seconds for the pdf data/jio-financial-services-annual-report-2023-2024-small.pdf. 
+    # 1. Took 50 seconds for the pdf data/jio-financial-services-annual-report-2023-2024-small.pdf.
     # 2. The markdown output looks similar to the test without EasyOCR.
     # 3. On passing the entire markdown content for the above pdf, we were able to get accurate response.
     # 4. Able to recognize complex table structures.
@@ -109,7 +114,7 @@ def custom_example():
     # pipeline_options.do_table_structure = True
     # pipeline_options.table_structure_options.do_cell_matching = True
     # pipeline_options.table_structure_options.mode = TableFormerMode.ACCURATE  # use more accurate TableFormer model
-    # 
+    #
     # doc_converter = DocumentConverter(
     #     format_options={
     #         InputFormat.PDF: PdfFormatOption(
@@ -195,7 +200,7 @@ def custom_example():
 
     # PRE-REQUISITES:
     # Install Tesseract by following the documentation here - https://ds4sd.github.io/docling/installation/#development-setup
-    # STEPS: 
+    # STEPS:
     # apt-get install tesseract-ocr tesseract-ocr-eng libtesseract-dev libleptonica-dev pkg-config
     # TESSDATA_PREFIX=$(dpkg -L tesseract-ocr-eng | grep tessdata$)
     # echo "Set TESSDATA_PREFIX=${TESSDATA_PREFIX}"
@@ -224,7 +229,7 @@ def custom_example():
 
     # PRE-REQUISITES:
     # Install Tesseract by following the documentation here - https://ds4sd.github.io/docling/installation/#development-setup
-    # STEPS: 
+    # STEPS:
     # apt-get install tesseract-ocr tesseract-ocr-eng libtesseract-dev libleptonica-dev pkg-config
     # TESSDATA_PREFIX=$(dpkg -L tesseract-ocr-eng | grep tessdata$)
     # echo "Set TESSDATA_PREFIX=${TESSDATA_PREFIX}"
@@ -276,11 +281,13 @@ def custom_example():
     with (output_dir / f"{doc_filename}.doctags").open("w", encoding="utf-8") as fp:
         fp.write(conv_result.document.export_to_document_tokens())
 
+
 # Refer to the detailed comments inside each aspect of the implementation to understand better.
 # Uncomment the required sections to test and comment the other sections.
 # Each section is divided based on this delimiter
 # # -----------------------------------------------------------------------------------------------
-# custom_example()
+custom_example()
+
 
 def image_export():
     logging.basicConfig(level=logging.INFO)
@@ -351,7 +358,9 @@ def image_export():
 
     _log.info(f"Document converted and figures exported in {end_time:.2f} seconds.")
 
+
 # image_export()
+
 
 # Convert the PDF into DocLing specific document and export every page of the PDF to markdown format.
 # Note that this implementation does not consider images embedded as part of the page.
@@ -369,9 +378,7 @@ def markdown_export_per_page():
 
     doc_converter = DocumentConverter(
         format_options={
-            InputFormat.PDF: PdfFormatOption(
-                pipeline_options=pipeline_options
-            )
+            InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)
         }
     )
 
@@ -384,14 +391,19 @@ def markdown_export_per_page():
 
     for page_no, page in conv_res.document.pages.items():
         _log.info(f"Processing Page number: {page_no}")
-        content_md = conv_res.document.export_to_markdown(page_no=page_no, image_placeholder="")
+        content_md = conv_res.document.export_to_markdown(
+            page_no=page_no, image_placeholder=""
+        )
         md_filename = output_dir / f"{doc_filename}-{page_no}.md"
         with md_filename.open("wb") as fp:
             fp.write(content_md.encode("utf-8"))
 
     end_time = time.time() - start_time
 
-    _log.info(f"Document converted and written to markdown per page in {end_time:.2f} seconds.")
+    _log.info(
+        f"Document converted and written to markdown per page in {end_time:.2f} seconds."
+    )
+
 
 # markdown_export_per_page()
 
@@ -429,13 +441,15 @@ def markdown_export_per_page_with_images():
 
     for page_no, page in conv_res.document.pages.items():
         _log.info(f"Processing Page number: {page_no}")
-        content_md = conv_res.document.export_to_markdown(page_no=page_no, image_placeholder="")
+        content_md = conv_res.document.export_to_markdown(
+            page_no=page_no, image_placeholder=""
+        )
         page_dir = Path(os.path.join(output_dir, f"page-{page_no}"))
         page_dir.mkdir(parents=True, exist_ok=True)
         md_filename = page_dir / f"{doc_filename}-{page_no}.md"
         with md_filename.open("wb") as fp:
             fp.write(content_md.encode("utf-8"))
-        
+
         # Iterate images and save to page_dir
         picture_counter = 0
         for element, _ in conv_res.document.iterate_items(page_no=page_no):
@@ -449,6 +463,9 @@ def markdown_export_per_page_with_images():
 
     end_time = time.time() - start_time
 
-    _log.info(f"Document converted and written to markdown per page in {end_time:.2f} seconds.")
+    _log.info(
+        f"Document converted and written to markdown per page in {end_time:.2f} seconds."
+    )
+
 
 # markdown_export_per_page_with_images()
