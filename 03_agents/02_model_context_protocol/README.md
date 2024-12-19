@@ -80,3 +80,7 @@ This solution was proposed in this [link](https://github.com/modelcontextprotoco
 [MCP from Anthropic](https://www.anthropic.com/news/model-context-protocol)
 
 [MCP - Docs](https://modelcontextprotocol.io/introduction)
+
+[MCP Curated Servers](https://www.mcphub.ai/servers)
+
+[Fast MCP - Build MCP servers fast leveraging Fast MCP framework](https://github.com/jlowin/fastmcp)
