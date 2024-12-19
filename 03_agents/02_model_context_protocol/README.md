@@ -26,7 +26,54 @@ Launch MCP inspector: `npx @modelcontextprotocol/inspector uv --directory D:/git
 
 Above command launches a web interface `http://localhost:5173` and clicking on `Connect` establishes connection to the server and we can list the tools.
 
+### Setup 2 - Using Claude Desktop
 
+For this setup, we install `Claude Desktop` app and going to leverage existing community server [Postgres](https://github.com/modelcontextprotocol/servers/tree/main/src/postgres) that shall be used to fetch the latest information and augment the response via language model.
+
+Create configuration file `claude_desktop_config.json` in the directory `%APPDATA%/Claude`.
+
+Add the following content in the `claude_desktop_config.json`.
+
+```json
+{
+    "mcpServers": {
+        "postgres": {
+        "command": "npx",
+        "args": [
+            "-y",
+            "@modelcontextprotocol/server-postgres",
+            "postgresql://user:password@localhost:5432/mydatabase"
+        ]
+        }
+    }
+}
+```
+
+We can start using the attached Postgres server.
+
+Note that this is currently working for `Claude Desktop app` that contains professional plan.
+
+### Setup 3 - Using Cline
+
+Cline (Autonomous coding agent) tool has MCP servers concept integrated into it. We have included the existing postgres server for testing purposes.
+
+Below is the json used, Had to perform certain workaround to overcome limitations in windows when using `npx`, hence we installed the modules in advance and used it.
+
+This solution was proposed in this [link](https://github.com/modelcontextprotocol/servers/issues/75). Refer to this more details.
+
+```json
+{
+    "mcpServers": {
+        "postgres": {
+        "command": "C:/Program Files/nodejs/node.exe",
+        "args": [
+            "C:/Users/20092/AppData/Roaming/npm/node_modules/@modelcontextprotocol/server-postgres/dist/index.js",
+            "postgresql://username:password@localhost:5432/database"
+        ]
+        }
+    }
+}
+```
 
 ## References
 
