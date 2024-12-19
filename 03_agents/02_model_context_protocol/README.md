@@ -14,9 +14,18 @@ In this exploration, we shall create our own MCP server and client and establish
 
 We followed the [Quickstart](https://modelcontextprotocol.io/quickstart) setup to perform this exploration.
 
-The locally created MCP server can be found [here](./mcp-servers/).
+The locally created MCP server can be found [here](./mcp-servers/). Refer to README.md in respective server folders.
 
-The locally created MCP client can be found [here](./mcp-clients/).
+The locally created MCP client can be found [here](./mcp-clients/). Refer to README.md in respective client folders.
+
+To connect via MCP inspector client. For this follow the below steps:
+
+Related documentation: https://modelcontextprotocol.io/docs/tools/inspector
+
+Launch MCP inspector: `npx @modelcontextprotocol/inspector uv --directory D:/gitlab/learnings/artificial-intelligence/llm-examples/03_agents/02_model_context_protocol/mcp-servers/weather/src/weather run weather`
+
+Above command launches a web interface `http://localhost:5173` and clicking on `Connect` establishes connection to the server and we can list the tools.
+
 
 
 ## References
