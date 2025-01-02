@@ -13,3 +13,5 @@ langchain-openai==0.2.14
 python-dotenv
 langchain-postgres==0.0.12
 psycopg-binary==3.2.3
+langchain-community==0.3.13
+duckduckgo_search
