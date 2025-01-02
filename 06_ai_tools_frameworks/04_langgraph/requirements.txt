@@ -1,0 +1,15 @@
+langgraph==0.2.60
+
+# The below dependency requires graphviz software to be installed on the system.
+# Download the software from https://graphviz.org/download/
+# Ensure microsoft build tools are present.
+# Install externally using the following command. Replace the Include directory and the Library path with
+# the paths where the software is installed on the system.
+
+# python -m pip install --no-cache-dir --no-binary pygraphviz pygraphviz==1.14 --config-settings="--global-option=build_ext" --config-settings="--global-option=-ID:\softwares\Graphviz-12.2.1-win64\include" --config-settings="--global-option=-LD:\softwares\Graphviz-12.2.1-win64\lib"
+
+# pygraphviz==1.14
+langchain-openai==0.2.14
+python-dotenv
+langchain-postgres==0.0.12
+psycopg-binary==3.2.3
