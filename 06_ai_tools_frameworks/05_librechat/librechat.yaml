@@ -11,12 +11,12 @@ cache: true
 interface:
   # Privacy policy settings
   privacyPolicy:
-    externalUrl: 'https://librechat.ai/privacy-policy'
+    externalUrl: "https://librechat.ai/privacy-policy"
     openNewTab: true
 
   # Terms of service
   termsOfService:
-    externalUrl: 'https://librechat.ai/tos'
+    externalUrl: "https://librechat.ai/tos"
     openNewTab: true
     modalAcceptance: true
     modalTitle: "Terms of Service for LibreChat"
@@ -58,7 +58,7 @@ interface:
       By using the Website, you acknowledge that you have read these Terms of Service and agree to be bound by them.
 
   endpointsMenu: true
-  modelSelect: false
+  modelSelect: true
   parameters: true
   sidePanel: true
   presets: false
@@ -69,7 +69,7 @@ interface:
 
 # Example Registration Object Structure (optional)
 registration:
-  socialLogins: ['github', 'google', 'discord', 'openid', 'facebook']
+  socialLogins: ["github", "google", "discord", "openid", "facebook"]
   # allowedDomains:
   # - "gmail.com"
 
@@ -81,7 +81,7 @@ registration:
 #       model: ''
 #       voices: ['']
 
-#  
+#
 #   stt:
 #     openai:
 #       url: ''
@@ -131,22 +131,15 @@ endpoints:
   #   capabilities: ["execute_code", "file_search", "actions", "tools"]
   custom:
     # Groq Example
-    - name: 'groq'
-      apiKey: '${GROQ_API_KEY}'
-      baseURL: 'https://api.groq.com/openai/v1/'
+    - name: "groq"
+      apiKey: "${GROQ_API_KEY}"
+      baseURL: "https://api.groq.com/openai/v1/"
       models:
-        default:
-          [
-            'llama3-70b-8192',
-            'llama3-8b-8192',
-            'llama2-70b-4096',
-            'mixtral-8x7b-32768',
-            'gemma-7b-it',
-          ]
+        default: ["llama3-70b-8192", "llama3-8b-8192"]
         fetch: false
       titleConvo: true
-      titleModel: 'mixtral-8x7b-32768'
-      modelDisplayLabel: 'groq'
+      titleModel: "llama3-8b-8192"
+      modelDisplayLabel: "Groq"
 
   bedrock:
     # Specifies the model to use for generating conversation titles.
@@ -154,8 +147,6 @@ endpoints:
     streamRate: 35
     availableRegions:
       - "us-east-1"
-
-
 # fileConfig:
 #   endpoints:
 #     assistants:
