@@ -23,3 +23,7 @@ Also, this configuration shall be updated with more scenarios as the exploration
 [Docs](https://www.librechat.ai/docs)
 
 [Toolkit](https://www.librechat.ai/toolkit)
+
+### Github Related
+
+[Using LibreChat in a corporate environment (Azure or self hosted)](https://github.com/danny-avila/LibreChat/discussions/1207)
