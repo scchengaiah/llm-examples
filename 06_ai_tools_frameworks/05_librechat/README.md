@@ -15,6 +15,7 @@ This [folder](../05_librechat/) contains the related files and configuration tha
 This is the initial configuration that was used to spin up the application. Add or remove the required configuration for advanced usecases such as using Agents and Model Context protocol servers.
 
 Also, this configuration shall be updated with more scenarios as the exploration progresses.
+
 ## References
 
 [Github Repo](https://github.com/danny-avila/LibreChat)

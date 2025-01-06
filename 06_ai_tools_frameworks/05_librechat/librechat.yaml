@@ -147,6 +147,17 @@ endpoints:
     streamRate: 35
     availableRegions:
       - "us-east-1"
+
+# Example MCP Servers Object Structure
+# We used google search along with sequential thinking to generate better responses.
+# https://github.com/modelcontextprotocol/servers/tree/main/src/sequentialthinking
+# https://www.librechat.ai/docs/configuration/librechat_yaml/object_structure/mcp_servers#example
+mcpServers:
+  sequential_thinking:
+    command: npx
+    args:
+      - -y
+      - "@modelcontextprotocol/server-sequential-thinking"
 # fileConfig:
 #   endpoints:
 #     assistants:
