@@ -1,5 +1,6 @@
 # For more information, see the Configuration Guide:
 # https://www.librechat.ai/docs/configuration/librechat_yaml
+# Root Settings - https://www.librechat.ai/docs/configuration/librechat_yaml/object_structure/config
 
 # Configuration version (required)
 version: 1.2.1
@@ -9,69 +10,70 @@ cache: true
 
 # Custom interface configuration
 interface:
-  # Privacy policy settings
-  privacyPolicy:
-    externalUrl: "https://librechat.ai/privacy-policy"
-    openNewTab: true
+    # Privacy policy settings
+    privacyPolicy:
+        externalUrl: "https://librechat.ai/privacy-policy"
+        openNewTab: true
 
-  # Terms of service
-  termsOfService:
-    externalUrl: "https://librechat.ai/tos"
-    openNewTab: true
-    modalAcceptance: true
-    modalTitle: "Terms of Service for LibreChat"
-    modalContent: |
-      # Terms and Conditions for LibreChat
+    # Terms of service
+    termsOfService:
+        externalUrl: "https://librechat.ai/tos"
+        openNewTab: true
+        modalAcceptance: true
+        modalTitle: "Terms of Service for LibreChat"
+        modalContent: |
+            # Terms and Conditions for LibreChat
 
-      *Effective Date: February 18, 2024*
+            *Effective Date: February 18, 2024*
 
-      Welcome to LibreChat, the informational website for the open-source AI chat platform, available at https://librechat.ai. These Terms of Service ("Terms") govern your use of our website and the services we offer. By accessing or using the Website, you agree to be bound by these Terms and our Privacy Policy, accessible at https://librechat.ai//privacy.
+            Welcome to LibreChat, the informational website for the open-source AI chat platform, available at https://librechat.ai. These Terms of Service ("Terms") govern your use of our website and the services we offer. By accessing or using the Website, you agree to be bound by these Terms and our Privacy Policy, accessible at https://librechat.ai//privacy.
 
-      ## 1. Ownership
+            ## 1. Ownership
 
-      Upon purchasing a package from LibreChat, you are granted the right to download and use the code for accessing an admin panel for LibreChat. While you own the downloaded code, you are expressly prohibited from reselling, redistributing, or otherwise transferring the code to third parties without explicit permission from LibreChat.
+            Upon purchasing a package from LibreChat, you are granted the right to download and use the code for accessing an admin panel for LibreChat. While you own the downloaded code, you are expressly prohibited from reselling, redistributing, or otherwise transferring the code to third parties without explicit permission from LibreChat.
 
-      ## 2. User Data
+            ## 2. User Data
 
-      We collect personal data, such as your name, email address, and payment information, as described in our Privacy Policy. This information is collected to provide and improve our services, process transactions, and communicate with you.
+            We collect personal data, such as your name, email address, and payment information, as described in our Privacy Policy. This information is collected to provide and improve our services, process transactions, and communicate with you.
 
-      ## 3. Non-Personal Data Collection
+            ## 3. Non-Personal Data Collection
 
-      The Website uses cookies to enhance user experience, analyze site usage, and facilitate certain functionalities. By using the Website, you consent to the use of cookies in accordance with our Privacy Policy.
+            The Website uses cookies to enhance user experience, analyze site usage, and facilitate certain functionalities. By using the Website, you consent to the use of cookies in accordance with our Privacy Policy.
 
-      ## 4. Use of the Website
+            ## 4. Use of the Website
 
-      You agree to use the Website only for lawful purposes and in a manner that does not infringe the rights of, restrict, or inhibit anyone else's use and enjoyment of the Website. Prohibited behavior includes harassing or causing distress or inconvenience to any person, transmitting obscene or offensive content, or disrupting the normal flow of dialogue within the Website.
+            You agree to use the Website only for lawful purposes and in a manner that does not infringe the rights of, restrict, or inhibit anyone else's use and enjoyment of the Website. Prohibited behavior includes harassing or causing distress or inconvenience to any person, transmitting obscene or offensive content, or disrupting the normal flow of dialogue within the Website.
 
-      ## 5. Governing Law
+            ## 5. Governing Law
 
-      These Terms shall be governed by and construed in accordance with the laws of the United States, without giving effect to any principles of conflicts of law.
+            These Terms shall be governed by and construed in accordance with the laws of the United States, without giving effect to any principles of conflicts of law.
 
-      ## 6. Changes to the Terms
+            ## 6. Changes to the Terms
 
-      We reserve the right to modify these Terms at any time. We will notify users of any changes by email. Your continued use of the Website after such changes have been notified will constitute your consent to such changes.
+            We reserve the right to modify these Terms at any time. We will notify users of any changes by email. Your continued use of the Website after such changes have been notified will constitute your consent to such changes.
 
-      ## 7. Contact Information
+            ## 7. Contact Information
 
-      If you have any questions about these Terms, please contact us at contact@librechat.ai.
+            If you have any questions about these Terms, please contact us at contact@librechat.ai.
 
-      By using the Website, you acknowledge that you have read these Terms of Service and agree to be bound by them.
+            By using the Website, you acknowledge that you have read these Terms of Service and agree to be bound by them.
 
-  endpointsMenu: true
-  modelSelect: true
-  parameters: true
-  sidePanel: true
-  presets: false
-  prompts: true
-  bookmarks: true
-  multiConvo: true
-  agents: true
+    endpointsMenu: true
+    modelSelect: true
+    # Setting this to true is essential to ensure that Agent Builder is visible irrespective of disableBuilder setting.
+    parameters: true
+    sidePanel: true
+    presets: false
+    prompts: false
+    bookmarks: false
+    multiConvo: false
+    agents: false
 
 # Example Registration Object Structure (optional)
 registration:
-  socialLogins: ["github", "google", "discord", "openid", "facebook"]
-  # allowedDomains:
-  # - "gmail.com"
+    socialLogins: ["github", "google", "discord", "openid", "facebook"]
+    # allowedDomains:
+    # - "gmail.com"
 
 # speech:
 #   tts:
@@ -102,62 +104,99 @@ registration:
 
 # Example Actions Object Structure
 actions:
-  allowedDomains:
-    - "swapi.dev"
-    - "librechat.ai"
-    - "google.com"
+    allowedDomains:
+        - "swapi.dev"
+        - "librechat.ai"
+        - "google.com"
 
 # Definition of custom endpoints
 endpoints:
-  # assistants:
-  #   disableBuilder: false # Disable Assistants Builder Interface by setting to `true`
-  #   pollIntervalMs: 3000  # Polling interval for checking assistant updates
-  #   timeoutMs: 180000  # Timeout for assistant operations
-  #   # Should only be one or the other, either `supportedIds` or `excludedIds`
-  #   supportedIds: ["asst_supportedAssistantId1", "asst_supportedAssistantId2"]
-  #   # excludedIds: ["asst_excludedAssistantId"]
-  #   Only show assistants that the user created or that were created externally (e.g. in Assistants playground).
-  #   # privateAssistants: false # Does not work with `supportedIds` or `excludedIds`
-  #   # (optional) Models that support retrieval, will default to latest known OpenAI models that support the feature
-  #   retrievalModels: ["gpt-4-turbo-preview"]
-  #   # (optional) Assistant Capabilities available to all users. Omit the ones you wish to exclude. Defaults to list below.
-  #   capabilities: ["code_interpreter", "retrieval", "actions", "tools", "image_vision"]
-  # agents:
-  #   (optional) Maximum recursion depth for agents, defaults to 25
-  #   recursionLimit: 50
-  #   (optional) Disable the builder interface for agents
-  #   disableBuilder: false
-  #   (optional) Agent Capabilities available to all users. Omit the ones you wish to exclude. Defaults to list below.
-  #   capabilities: ["execute_code", "file_search", "actions", "tools"]
-  custom:
-    # Groq Example
-    - name: "groq"
-      apiKey: "${GROQ_API_KEY}"
-      baseURL: "https://api.groq.com/openai/v1/"
-      models:
-        default: ["llama3-70b-8192", "llama3-8b-8192"]
-        fetch: false
-      titleConvo: true
-      titleModel: "llama3-8b-8192"
-      modelDisplayLabel: "Groq"
+    # assistants:
+    #   disableBuilder: false # Disable Assistants Builder Interface by setting to `true`
+    #   pollIntervalMs: 3000  # Polling interval for checking assistant updates
+    #   timeoutMs: 180000  # Timeout for assistant operations
+    #   # Should only be one or the other, either `supportedIds` or `excludedIds`
+    #   supportedIds: ["asst_supportedAssistantId1", "asst_supportedAssistantId2"]
+    #   # excludedIds: ["asst_excludedAssistantId"]
+    #   Only show assistants that the user created or that were created externally (e.g. in Assistants playground).
+    #   # privateAssistants: false # Does not work with `supportedIds` or `excludedIds`
+    #   # (optional) Models that support retrieval, will default to latest known OpenAI models that support the feature
+    #   retrievalModels: ["gpt-4-turbo-preview"]
+    #   # (optional) Assistant Capabilities available to all users. Omit the ones you wish to exclude. Defaults to list below.
+    #   capabilities: ["code_interpreter", "retrieval", "actions", "tools", "image_vision"]
+    # agents:
+    #   (optional) Maximum recursion depth for agents, defaults to 25
+    #   recursionLimit: 50
+    #   (optional) Disable the builder interface for agents
+    #   disableBuilder: false
+    #   (optional) Agent Capabilities available to all users. Omit the ones you wish to exclude. Defaults to list below.
+    #   capabilities: ["execute_code", "file_search", "actions", "tools"]
+    custom:
+        # Groq Example
+        - name: "groq"
+          apiKey: "${GROQ_API_KEY}"
+          baseURL: "https://api.groq.com/openai/v1/"
+          models:
+              default: ["llama3-70b-8192", "llama3-8b-8192"]
+              fetch: false
+          titleConvo: true
+          titleModel: "llama3-8b-8192"
+          modelDisplayLabel: "Groq"
 
-  bedrock:
-    # Specifies the model to use for generating conversation titles.
-    titleModel: "us.anthropic.claude-3-5-haiku-20241022-v1:0"
-    streamRate: 35
-    availableRegions:
-      - "us-east-1"
+        # - name: "Ollama"
+        #   apiKey: "ollama"
+        #   # use 'host.docker.internal' instead of localhost if running LibreChat in a docker container
+        #   baseURL: "http://46.4.56.55:11434/v1/chat/completions"
+        #   models:
+        #     default: [
+        #       llama3.2-vision:11b,
+        #       llama3.2:latest
+        #       ]
+        #     # fetching list of models is supported but the `name` field must start
+        #     # with `ollama` (case-insensitive), as it does in this example.
+        #     fetch: true
+        #   titleConvo: true
+        #   titleModel: "current_model"
+        #   summarize: false
+        #   summaryModel: "current_model"
+        #   forcePrompt: false
+        #   modelDisplayLabel: "Ollama"
+
+    bedrock:
+        # Specifies the model to use for generating conversation titles.
+        titleModel: "us.anthropic.claude-3-5-haiku-20241022-v1:0"
+        streamRate: 35
+        availableRegions:
+            - "us-east-1"
+
+    agents:
+        # The below parameter becomes applicable only when interface.parameters is set to true.
+        # To disable for USER role, login with ADMIN role and update the Admin Settings under Agent Builder.
+        disableBuilder: false
+        capabilities:
+            - "tools"
 
 # Example MCP Servers Object Structure
-# We used google search along with sequential thinking to generate better responses.
-# https://github.com/modelcontextprotocol/servers/tree/main/src/sequentialthinking
-# https://www.librechat.ai/docs/configuration/librechat_yaml/object_structure/mcp_servers#example
 mcpServers:
-  sequential_thinking:
-    command: npx
-    args:
-      - -y
-      - "@modelcontextprotocol/server-sequential-thinking"
+    sequential_thinking:
+        command: npx
+        args:
+            - -y
+            - "@modelcontextprotocol/server-sequential-thinking"
+
+# https://www.librechat.ai/docs/configuration/librechat_yaml/object_structure/file_config
+# Disabled file upload as part of testing. Refer to the configuration for more options.
+# Enable Share to all Users, if you want to share your agent to all users of your Organization.
+fileConfig:
+    endpoints:
+        groq:
+            disabled: true
+        bedrock:
+            disabled: true
+        ollama:
+            disabled: true
+        agents:
+            fileLimit: 0
 # fileConfig:
 #   endpoints:
 #     assistants:
