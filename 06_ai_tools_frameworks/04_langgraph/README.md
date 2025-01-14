@@ -6,4 +6,4 @@
 
 ### Tutorials
 
-[Langchain Academy - Langgraph Course](https://academy.langchain.com/courses/intro-to-langgraph)
+[Langchain Academy - Langgraph Course](https://academy.langchain.com/courses/intro-to-langgraph) - [Notes](./courses/01_langgraph_course_notes.md)
