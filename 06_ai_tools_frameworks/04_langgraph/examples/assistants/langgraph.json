@@ -1,7 +1,8 @@
 {
   "dockerfile_lines": [],
   "graphs": {
-    "polarion_assistant": "./polarion_assistant.py:graph"
+    "polarion_assistant": "./polarion_assistant.py:graph",
+    "database_assistant": "./database_assistant.py:graph"
   },
   "env": "./.env",
   "python_version": "3.11",
