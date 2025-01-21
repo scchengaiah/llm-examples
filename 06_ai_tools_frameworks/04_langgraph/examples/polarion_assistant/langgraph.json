@@ -1,0 +1,9 @@
+{
+  "dockerfile_lines": [],
+  "graphs": {
+    "polarion_assistant": "./polarion_assistant.py:graph"
+  },
+  "env": "./.env",
+  "python_version": "3.11",
+  "dependencies": ["."]
+}

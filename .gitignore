@@ -26,3 +26,5 @@ settings.json
 
 04_advanced_rag/04_multimodal_rag/data/images
 04_advanced_rag/_01_implementations/pdf_advanced_rag/data/images
+
+.langgraph_api
