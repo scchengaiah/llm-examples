@@ -16,29 +16,23 @@ Langgraph has inbuilt abstractions for state such as MessagesState (`from langgr
 
 Langgraph has inbuilt abstractions to perform tool call and execute the flow conditionally by using `from langgraph.prebuilt import tools_condition` and `from langgraph.prebuilt import ToolNode`.
 
-## State Schema
+Langgraph Studio offers an excellent UI way for testing graphs, however, it is supported locally only for macos users. For other platforms, we have a workaround by running the local langgraph server and launch it via langsmith. This [documentation](https://langchain-ai.github.io/langgraph/concepts/langgraph_studio/#development-server-with-web-ui) provides clear instructions to perform the same.
+
+### State Schema
 
 Schema can be defined as `TypedDict`, `Dataclass` or `Pydantic` where `Pydantic` offers the best approach for runtime validations. Go with `Pydantic` while defining the state.
 
 Refer to [state-schema.ipynb](https://github.com/scchengaiah/langchain-academy/blob/main/module-2/state-schema.ipynb) file for more information.
 
-## State Reducers
+### State Reducers
 
 By default, state gets overriden during each execution of node, how can reducers help in managing the state such as appending information using inbuilt operators or custom reducers can be found in the file [state-reducers.ipynb](https://github.com/scchengaiah/langchain-academy/blob/main/module-2/state-reducers.ipynb).
 
-## Trimming/Filtering of Messages
+### Trimming/Filtering of Messages
 
 Langgraph and Langchain together offers several strategies to filter or trim messages to handle the context length of the LLM's. Refer [trim-filter-messages.ipynb](https://github.com/scchengaiah/langchain-academy/blob/main/module-2/trim-filter-messages.ipynb) for detailed examples.
 
 Refer Langchain documentation on message trimming [here](https://python.langchain.com/v0.2/docs/how_to/trim_messages/#getting-the-last-max_tokens-tokens).
-
-## Chatbot Example with summarization and External Memory.
-
-Nice Examples explaining message summarization and persistence can be found in the below links.
-
-[chatbot-summarization.ipynb](https://github.com/scchengaiah/langchain-academy/blob/main/module-2/chatbot-summarization.ipynb)
-
-[chatbot-external-memory.ipynb](https://github.com/scchengaiah/langchain-academy/blob/main/module-2/chatbot-external-memory.ipynb)
 
 ### Persistence/Memory
 
@@ -56,7 +50,25 @@ To scale in production scenarios, Langchain provides open-sourced `langgraph_che
 
 Implementation example with `postgres` can be found [here](https://langchain-ai.github.io/langgraph/how-tos/persistence_postgres/)
 
+#### Chatbot Example with summarization and External Memory.
 
+Nice Examples explaining message summarization and persistence can be found in the below links.
+
+[chatbot-summarization.ipynb](https://github.com/scchengaiah/langchain-academy/blob/main/module-2/chatbot-summarization.ipynb)
+
+[chatbot-external-memory.ipynb](https://github.com/scchengaiah/langchain-academy/blob/main/module-2/chatbot-external-memory.ipynb)
+
+### Streaming
+
+Langgraph offers some advanced streaming patterns that helps to stream the graph state, messages, tool calls.
+
+Refer to the file [streaming-interruption.ipynb](https://github.com/scchengaiah/langchain-academy/blob/main/module-3/streaming-interruption.ipynb) for more information.
+
+> It is important to note that the approach of streaming when the langgraph agents are exposed via API is different. This is covered in the above example using langgraph studio. However, when we deploy our langgraph application as backend API for the usage of langgraph API using self-hosted deployment, we can leverage similar API calls to perform streaming.
+
+### Interrupts - Update State, Human in the Feedback loop and Time Travel concepts
+
+More information can be found [here](https://github.com/scchengaiah/langchain-academy/tree/main/module-3).
 
 ### Deployment
 
@@ -70,7 +82,15 @@ For detailed information on this topic, Refer [here](https://langchain-ai.github
 
 For self-hosting with docker, Refer [here](https://langchain-ai.github.io/langgraph/how-tos/deploy-self-hosted/).
 
+### Research Assistant
+
+For a fully functional example of research assistant, Refer [research-assistant.ipynb](https://github.com/scchengaiah/langchain-academy/blob/main/module-4/research-assistant.ipynb).
+
+To dive deeper and explore the Multi Agent architecture, Refer [here](https://langchain-ai.github.io/langgraph/tutorials/#agent-architectures).
+
 ## References
 
 [Course Source Code](https://github.com/langchain-ai/langchain-academy)
+
+[LangGraph Core Concepts](https://dev.to/jamesli/introduction-to-langgraph-core-concepts-and-basic-components-5bak)
 
