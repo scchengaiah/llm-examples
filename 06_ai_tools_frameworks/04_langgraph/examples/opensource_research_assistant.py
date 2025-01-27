@@ -225,5 +225,5 @@ def research_assistant(query: str, k: int = 5) -> str:
 if __name__ == "__main__":
     query = "What are the latest advancements in renewable energy storage technologies?"
     query = "Can you research on the process involved to book tickets to kedarnath yatra via helicopter ? Guide me with step by step # instructions and ensure that you ground your research from the trusted sources"
-    query = "Research on the latest qwen 2.5 model that supports 1M context window."
+    query = "does powerBI store a copy of the data ?"
     print(research_assistant(query))
