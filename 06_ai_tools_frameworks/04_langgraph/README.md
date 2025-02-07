@@ -7,3 +7,5 @@
 ### Tutorials
 
 [Langchain Academy - Langgraph Course](https://academy.langchain.com/courses/intro-to-langgraph) - [Notes](./courses/01_langgraph_course_notes.md)
+
+[Multi-agent Systems](https://langchain-ai.github.io/langgraph/concepts/multi_agent/#multi-agent-systems)
